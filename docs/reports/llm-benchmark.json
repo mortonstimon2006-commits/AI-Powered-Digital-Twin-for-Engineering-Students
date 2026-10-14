@@ -1,0 +1,66 @@
+{
+  "model": "qwen3:8b",
+  "num_ctx": 4096,
+  "gpu_before": {
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "memory_total_mb": 8188,
+    "memory_used_mb": 7123
+  },
+  "cold": {
+    "wall_s": 13.09,
+    "load_s": 7.75,
+    "prompt_tokens": 905,
+    "prompt_tok_per_s": 1193.1,
+    "gen_tokens": 193,
+    "gen_tok_per_s": 42.2
+  },
+  "warm_runs": [
+    {
+      "wall_s": 5.14,
+      "load_s": 0.01,
+      "prompt_tokens": 905,
+      "prompt_tok_per_s": 2452.6,
+      "gen_tokens": 200,
+      "gen_tok_per_s": 42.7
+    },
+    {
+      "wall_s": 5.15,
+      "load_s": 0.01,
+      "prompt_tokens": 905,
+      "prompt_tok_per_s": 2419.1,
+      "gen_tokens": 200,
+      "gen_tok_per_s": 42.7
+    },
+    {
+      "wall_s": 4.72,
+      "load_s": 0.01,
+      "prompt_tokens": 905,
+      "prompt_tok_per_s": 2427.9,
+      "gen_tokens": 182,
+      "gen_tok_per_s": 42.7
+    }
+  ],
+  "warm_median": {
+    "wall_s": 5.14,
+    "prompt_tok_per_s": 2427.9,
+    "gen_tok_per_s": 42.7
+  },
+  "loaded": [
+    {
+      "name": "qwen3:8b",
+      "size_mb": 5320,
+      "size_vram_mb": 5320,
+      "gpu_offload_share": 1.0,
+      "context_length": 4096
+    }
+  ],
+  "two_concurrent_requests_wall_s": [
+    0.26,
+    0.26
+  ],
+  "gpu_after": {
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "memory_total_mb": 8188,
+    "memory_used_mb": 7060
+  }
+}

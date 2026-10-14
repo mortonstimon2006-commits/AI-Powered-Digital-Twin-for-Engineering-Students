@@ -1,0 +1,91 @@
+[project]
+name = "twinpath-backend"
+version = "0.1.0"
+description = "TwinPath AI â€” career digital twin backend (FastAPI)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  # web / api
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic",
+  "pydantic-settings",
+  "email-validator",
+  "python-multipart",
+  "httpx",
+  # data
+  "sqlalchemy",
+  "alembic",
+  "psycopg[binary]",
+  # security
+  "argon2-cffi",
+  "cryptography",
+  "pyotp",
+  # ml inference + explanations
+  "numpy",
+  "pandas",
+  "scikit-learn",
+  "xgboost",
+  "shap",
+  "joblib",
+  # graph + retrieval + documents
+  "networkx",
+  "chromadb",
+  "pypdf",
+  "python-docx",
+]
+
+[dependency-groups]
+train = [
+  "matplotlib",
+]
+dev = [
+  "pytest",
+  "pytest-cov",
+  "ruff",
+  "mypy",
+  "pip-audit",
+  "types-python-dateutil",
+]
+
+[tool.uv]
+default-groups = ["train", "dev"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py312"
+extend-exclude = ["migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "C4", "SIM", "RUF", "ASYNC"]
+ignore = [
+  "S101",   # assert is fine in tests
+  "B008",   # FastAPI Depends() in defaults is idiomatic
+  "RUF012",
+  "E501",   # layout is owned by `ruff format`; long prose strings are intentional
+  "RUF001", "RUF002", "RUF003",  # intentional typographic characters (â€“, Ã—, â‰¤) in docs/messages
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S311", "S108"]
+"ml_pipeline/**" = ["S311"]
+"eval/**" = ["S105", "S106"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+files = ["app", "ml_pipeline", "eval"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+  "ollama: requires a running local Ollama with the configured models",
+  "slow: long-running test",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning:chromadb.*",
+]

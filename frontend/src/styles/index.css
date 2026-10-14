@@ -1,0 +1,142 @@
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+@import "tailwindcss";
+
+/* ============================================================================
+   TwinPath design tokens. Every colour, font, radius and motion value used by
+   components comes from here (Tailwind v4 CSS-first theme).
+   ========================================================================== */
+@theme {
+  /* surfaces — deep midnight, layered */
+  --color-ink-950: #04060c;
+  --color-ink-900: #060912;
+  --color-ink-850: #0a0f1c;
+  --color-ink-800: #0e1424;
+  --color-ink-750: #131b2e;
+  --color-ink-700: #1a2338;
+  --color-line: #233049;
+  --color-line-strong: #31405e;
+
+  /* text */
+  --color-fg: #e8edf6;
+  --color-fg-muted: #a3b0c6;
+  --color-fg-faint: #6f7d96;
+
+  /* brand accents (restrained) */
+  --color-aurora: #5eead4;
+  --color-aurora-strong: #2dd4bf;
+  --color-iris: #a78bfa;
+  --color-iris-strong: #8b5cf6;
+
+  /* semantics */
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-danger: #fb7185;
+  --color-info: #7dd3fc;
+
+  /* skill categories (consistent across charts, graph and 3D) */
+  --color-cat-programming: #7dd3fc;
+  --color-cat-dsa: #a78bfa;
+  --color-cat-databases: #5eead4;
+  --color-cat-web: #f9a8d4;
+  --color-cat-ml_ai: #fbbf24;
+  --color-cat-data: #fdba74;
+  --color-cat-cloud_devops: #93c5fd;
+  --color-cat-security: #fca5a5;
+  --color-cat-professional: #c4b5fd;
+
+  /* typography */
+  --font-display: "Space Grotesk Variable", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  /* radii & shadows */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 12px 32px -18px rgb(0 0 0 / 0.8);
+  --shadow-glow: 0 0 0 1px rgb(94 234 212 / 0.25), 0 8px 30px -12px rgb(94 234 212 / 0.35);
+
+  /* motion */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-shimmer: shimmer 1.8s linear infinite;
+
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-ink-900 text-fg font-sans antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+    min-height: 100dvh;
+    background-image:
+      radial-gradient(1200px 600px at 10% -10%, rgb(94 234 212 / 0.06), transparent 60%),
+      radial-gradient(900px 500px at 110% 0%, rgb(167 139 250 / 0.07), transparent 60%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-fg;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: rgb(94 234 212 / 0.25); }
+  :focus-visible {
+    outline: 2px solid var(--color-aurora);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* scrollbar */
+  * { scrollbar-width: thin; scrollbar-color: var(--color-line-strong) transparent; }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-line bg-ink-850/80 shadow-[var(--shadow-card)] backdrop-blur-sm;
+  }
+  .card-glass {
+    @apply rounded-xl border border-white/[0.06] bg-white/[0.025] backdrop-blur-md;
+  }
+  .eyebrow {
+    @apply font-mono text-[0.7rem] uppercase tracking-[0.18em] text-fg-faint;
+  }
+  .metric {
+    @apply font-mono tabular-nums;
+  }
+  .skeleton {
+    background: linear-gradient(90deg, var(--color-ink-800) 25%, var(--color-ink-700) 37%, var(--color-ink-800) 63%);
+    background-size: 400% 100%;
+    animation: var(--animate-shimmer);
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .text-gradient {
+    background: linear-gradient(100deg, var(--color-aurora) 0%, #c7d2fe 45%, var(--color-iris) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

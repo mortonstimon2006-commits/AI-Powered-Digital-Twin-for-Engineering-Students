@@ -1,0 +1,41 @@
+# --- secrets & local config ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# --- node ---
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# --- runtime data (never commit student data, uploads, vectors or model weights) ---
+backend/var/
+backend/artifacts/models/*
+!backend/artifacts/models/.gitkeep
+backend/artifacts/datasets/*
+!backend/artifacts/datasets/.gitkeep
+backups/
+
+# --- os / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

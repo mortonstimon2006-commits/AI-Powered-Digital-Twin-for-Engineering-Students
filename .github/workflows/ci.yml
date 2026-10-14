@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    services:
+      postgres:
+        image: postgres:18.6-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-superuser-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      PGHOST: localhost
+      PGPORT: "5432"
+      PGPASSWORD: ci-superuser-password
+      POSTGRES_USER: postgres
+      TWINPATH_OWNER_PASSWORD: ci-owner-password
+      TWINPATH_APP_PASSWORD: ci-app-password
+      TWINPATH_DATABASES: twinpath_test
+      TEST_DATABASE_URL: postgresql+psycopg://twinpath_app:ci-app-password@localhost:5432/twinpath_test
+      TEST_MIGRATION_DATABASE_URL: postgresql+psycopg://twinpath_owner:ci-owner-password@localhost:5432/twinpath_test
+      DATABASE_URL: postgresql+psycopg://twinpath_app:ci-app-password@localhost:5432/twinpath_test
+      MIGRATION_DATABASE_URL: postgresql+psycopg://twinpath_owner:ci-owner-password@localhost:5432/twinpath_test
+      TWINPATH_ENV: test
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.1"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install locked dependencies
+        run: uv sync --frozen
+      - name: Generate ephemeral CI secrets (never stored in the repository)
+        run: |
+          echo "SECRET_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe(48))')" >> "$GITHUB_ENV"
+          echo "FIELD_ENCRYPTION_KEY=$(python -c 'import base64,os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())')" >> "$GITHUB_ENV"
+      - name: Bootstrap least-privilege database roles (same script as docker-compose)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client && sh ../infra/postgres/init/01-roles-and-databases.sh
+      - name: Lint and format
+        run: uv run ruff check app ml_pipeline tests eval && uv run ruff format --check app ml_pipeline tests eval
+      - name: Type check
+        run: uv run mypy
+      - name: Migrations (up / down / up) and model drift
+        run: |
+          uv run alembic upgrade head
+          uv run alembic downgrade base
+          uv run alembic upgrade head
+          uv run alembic check
+      - name: Tests (real PostgreSQL; Ollama-dependent tests are excluded by design)
+        run: uv run pytest -q -m "not ollama"
+      - name: Dependency audit (known vulnerabilities)
+        # Documented exceptions: Chroma HTTP-server CVEs that are unreachable because TwinPath only uses the
+        # embedded PersistentClient. See docs/security/dependency-exceptions.md (re-review on every chromadb release).
+        run: >-
+          uv run pip-audit --skip-editable
+          --ignore-vuln PYSEC-2026-311 --ignore-vuln PYSEC-2026-3813
+          --ignore-vuln PYSEC-2026-3814 --ignore-vuln PYSEC-2026-3815
+
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.21.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Dependency audit (production dependencies)
+        run: npm audit --omit=dev --audit-level=high
+
+  secrets:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Secret scanning (gitleaks)
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.28.0 git /repo --no-banner --redact --exit-code 1
+
+  containers:
+    runs-on: ubuntu-24.04
+    needs: [backend, frontend]
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build images
+        run: |
+          docker build -f backend/Dockerfile -t twinpath-api:ci .
+          docker build -f frontend/Dockerfile -t twinpath-web:ci frontend
+      - name: Image vulnerability scan (HIGH/CRITICAL with available fixes)
+        run: |
+          for img in twinpath-api:ci twinpath-web:ci; do
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.67.2 image \
+              --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --no-progress "$img"
+          done

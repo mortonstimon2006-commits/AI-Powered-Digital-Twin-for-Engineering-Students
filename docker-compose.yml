@@ -1,0 +1,99 @@
+# TwinPath AI — local development / pilot stack.
+#   docker compose up -d db                 # database only (run backend + frontend natively)
+#   docker compose --profile app up -d      # full stack in containers -> http://localhost:8080
+# Ollama runs on the HOST by default (GPU drivers live there) and is reached via
+# host.docker.internal. It is never published on a public interface.
+name: twinpath
+
+x-hardening: &hardening
+  security_opt:
+    - no-new-privileges:true
+  cap_drop: ["ALL"]
+
+services:
+  db:
+    image: postgres:18.6-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:?set in .env}
+      TWINPATH_OWNER_PASSWORD: ${TWINPATH_OWNER_PASSWORD:?set in .env}
+      TWINPATH_APP_PASSWORD: ${TWINPATH_APP_PASSWORD:?set in .env}
+      TWINPATH_DATABASES: ${TWINPATH_DATABASES:-twinpath twinpath_test}
+    ports:
+      - "127.0.0.1:5433:5432"   # loopback only (for native development and backups)
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+    shm_size: 256mb
+
+  # One-shot: apply migrations (schema-owner role) and load the reference catalogue.
+  migrate:
+    profiles: ["app"]
+    build: &api-build
+      context: .
+      dockerfile: backend/Dockerfile
+    image: twinpath-api:local
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment: &api-env
+      TWINPATH_ENV: ${TWINPATH_ENV:-development}
+      DATABASE_URL: postgresql+psycopg://twinpath_app:${TWINPATH_APP_PASSWORD}@db:5432/twinpath
+      MIGRATION_DATABASE_URL: postgresql+psycopg://twinpath_owner:${TWINPATH_OWNER_PASSWORD}@db:5432/twinpath
+      OLLAMA_BASE_URL: ${OLLAMA_DOCKER_URL:-http://host.docker.internal:11434}
+      ALLOWED_ORIGINS: ${CONTAINER_ALLOWED_ORIGINS:-http://localhost:8080}
+      PUBLIC_APP_URL: ${CONTAINER_PUBLIC_APP_URL:-http://localhost:8080}
+      TRUST_PROXY_HEADERS: "true"
+    command: ["sh", "-c", "alembic upgrade head && python -m app.cli seed"]
+    restart: "no"
+    <<: *hardening
+
+  api:
+    profiles: ["app"]
+    build: *api-build
+    image: twinpath-api:local
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    env_file: .env
+    environment: *api-env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - apidata:/app/var
+      - ./backend/artifacts/models:/app/artifacts/models:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    expose: ["8000"]          # internal network only — never published
+    <<: *hardening
+
+  web:
+    profiles: ["app"]
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: twinpath-web:local
+    restart: unless-stopped
+    depends_on: [api]
+    ports:
+      - "127.0.0.1:8080:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+    <<: *hardening
+
+volumes:
+  pgdata:
+  apidata:

@@ -1,0 +1,18 @@
+# Production/staging TLS edge in front of the `web` container (example).
+# Caddy obtains and renews certificates automatically. Replace the domain, then run Caddy on the
+# public host and keep the `web` container bound to loopback/private network only.
+twinpath.example.edu {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains"
+		-Server
+	}
+	request_body {
+		max_size 6MB
+	}
+	reverse_proxy 127.0.0.1:8080 {
+		# SSE mentor stream: flush immediately
+		flush_interval -1
+		header_up X-Forwarded-Proto {scheme}
+	}
+}
