@@ -7,6 +7,8 @@ uv run python -m app.cli create-admin EMAIL      # create/promote an administrat
 uv run python -m app.cli retention               # apply data-retention policy
 uv run python -m app.cli models                  # list registered model versions
 uv run python -m app.cli bench-mentor            # measure local LLM latency / throughput / VRAM
+uv run python -m app.cli deploy-init             # seed + register shipped model artifacts (run after migrations)
+uv run python -m app.cli serve-hosted            # migrations + deploy-init + API in one process (single-container hosts)
 """
 
 from __future__ import annotations
@@ -25,6 +27,45 @@ def cmd_seed(_: argparse.Namespace) -> None:
 
     with system_session() as db:
         print(json.dumps(seed_catalogue(db)))
+
+
+def cmd_deploy_init(_: argparse.Namespace) -> None:
+    """Idempotent start-up step for hosted deployments: reference data plus any model artifacts
+    shipped in MODEL_ARTIFACT_DIR (activated only when no model of that kind is active)."""
+    from app.db import system_session
+    from app.ml.artifacts import register_bundled
+    from app.seed.catalogue import seed_catalogue
+
+    with system_session() as db:
+        seeded = seed_catalogue(db)
+    print(json.dumps({"seeded": seeded, "models": register_bundled()}))
+
+
+def cmd_serve_hosted(_: argparse.Namespace) -> None:
+    """Start-up for single-container hosts without a separate migration job (e.g. Render's free
+    plan). Runs migrations (owner role), deploy-init (app role) and the API in ONE process, so the
+    heavy imports happen once; on a 0.1-CPU instance this shortens every cold start."""
+    import os
+    from pathlib import Path
+
+    import uvicorn
+    from alembic import command
+    from alembic.config import Config
+
+    command.upgrade(Config(str(Path(__file__).resolve().parents[1] / "alembic.ini")), "head")
+    cmd_deploy_init(argparse.Namespace())
+    from app.main import app
+
+    # One worker: rate limits and the mentor queue are in-process.
+    uvicorn.run(
+        app,
+        host="0.0.0.0",  # noqa: S104 - container-internal; the host's proxy is the only ingress
+        port=int(os.environ.get("PORT", "8000")),
+        workers=1,
+        proxy_headers=True,
+        forwarded_allow_ips="*",
+        server_header=False,
+    )
 
 
 def cmd_validate_links(_: argparse.Namespace) -> None:
@@ -113,6 +154,8 @@ def main(argv: list[str] | None = None) -> None:
     p.set_defaults(fn=cmd_create_admin)
     sub.add_parser("retention").set_defaults(fn=cmd_retention)
     sub.add_parser("models").set_defaults(fn=cmd_models)
+    sub.add_parser("deploy-init").set_defaults(fn=cmd_deploy_init)
+    sub.add_parser("serve-hosted").set_defaults(fn=cmd_serve_hosted)
     b = sub.add_parser("bench-mentor")
     b.add_argument("--runs", type=int, default=3)
     b.set_defaults(fn=cmd_bench_mentor)

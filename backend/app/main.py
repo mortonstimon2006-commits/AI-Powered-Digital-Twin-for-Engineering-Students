@@ -1,4 +1,4 @@
-"""TwinPath AI API — application factory."""
+"""AI Career Guidance App API — application factory."""
 
 from __future__ import annotations
 
@@ -37,9 +37,9 @@ def create_app() -> FastAPI:
     configure_logging(settings.log_level)
     docs = settings.api_docs_enabled
     app = FastAPI(
-        title="TwinPath AI API",
+        title="AI Career Guidance App API",
         version="0.1.0",
-        description="Career digital-twin platform: readiness modelling, skill gaps, simulation, roadmaps, local AI mentor.",
+        description="Career digital-twin platform: readiness modelling, skill gaps, simulation, roadmaps, local Personalized Mentor.",
         docs_url="/api/docs" if docs else None,
         redoc_url="/api/redoc" if docs else None,
         openapi_url="/api/openapi.json" if docs else None,

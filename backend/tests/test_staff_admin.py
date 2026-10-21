@@ -181,3 +181,26 @@ def test_admin_system_status(seeded, make_client, owner_engine):
     admin = _staff(make_client, owner_engine, "admin@example.edu", "admin")
     st = admin.get(f"{API}/admin/system").json()
     assert st["database"] == "ok" and "ollama" in st and "mentor_queue" in st and st["counts"]["users"] == 1
+
+
+def test_feedback_is_listed_for_admins_anonymously_and_rate_limited(seeded, student, make_client, owner_engine):
+    s = student()
+    sent = s.post(
+        f"{API}/feedback",
+        json={"target_type": "gap_analysis", "target_id": "/app/gaps", "rating": 4, "comment": "  Clear gap list  "},
+    )
+    assert sent.status_code == 200
+    assert s.post(f"{API}/feedback", json={"target_type": "general", "rating": 2, "comment": "Login was slow"}).status_code == 200
+    assert s.get(f"{API}/admin/feedback").status_code == 403  # students cannot read the list
+
+    admin = _staff(make_client, owner_engine, "admin@example.edu", "admin")
+    listed = admin.get(f"{API}/admin/feedback").json()
+    assert listed["total"] == 2
+    assert [i["comment"] for i in listed["items"]] == ["Login was slow", "Clear gap list"]  # newest first, trimmed
+    assert listed["items"][1]["target_id"] == "/app/gaps"
+    assert not {"user_id", "email", "display_name"} & set(listed["items"][0])  # anonymous by design
+    only_gaps = admin.get(f"{API}/admin/feedback", params={"target_type": "gap_analysis"}).json()
+    assert only_gaps["total"] == 1 and only_gaps["items"][0]["rating"] == 4
+
+    statuses = {s.post(f"{API}/feedback", json={"target_type": "general", "rating": 5}).status_code for _ in range(30)}
+    assert 429 in statuses  # 30 per hour per user, including the two above

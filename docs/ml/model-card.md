@@ -1,4 +1,4 @@
-# Model card — TwinPath readiness classifier
+# Model card — AI Career Guidance App readiness classifier
 
 > **Status: DEMONSTRATION MODEL — trained and evaluated on synthetic data.**
 > Every number below measures how well the pipeline recovers a *simulated* process

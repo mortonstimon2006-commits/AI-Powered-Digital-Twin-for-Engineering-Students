@@ -332,7 +332,7 @@ def visual_payload(
                 "framework": "Defined by the role-skill framework",
                 "evidence": "Backed by your recorded evidence or assessments",
                 "self_reported": "Your self-rating only",
-                "inferred": "Inferred by TwinPath from a related skill — not recorded evidence",
+                "inferred": "Inferred by the app from a related skill — not recorded evidence",
             }
         },
     }

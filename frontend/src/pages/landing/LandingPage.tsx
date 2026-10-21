@@ -44,7 +44,7 @@ const CAPABILITIES = [
   { icon: FlaskConical, title: "What-if simulator", body: "Change hypothetical inputs on an isolated copy of your twin and see how the same model and framework respond. Your real profile is never touched." },
   { icon: Network, title: "Knowledge graph", body: "Skills, prerequisites, roles, resources and your evidence in one graph, with recorded facts visually distinct from inferences." },
   { icon: Route, title: "Adaptive roadmap", body: "Prerequisite-ordered plans built from your real gaps, scheduled around your weekly hours, using a catalogue of link-checked resources." },
-  { icon: Bot, title: "Private local AI mentor", body: "A retrieval-augmented mentor that runs on a local model through Ollama. Your data and documents are never sent to an external AI service." },
+  { icon: Bot, title: "Personalized Mentor, private and local", body: "A retrieval-augmented mentor that runs on a local model through Ollama. Your data and documents are never sent to an external AI service." },
   { icon: ClipboardCheck, title: "Mentor verification", body: "Assigned mentors can record assessments and verify evidence, but only while you grant mentor sharing." },
 ];
 
@@ -146,7 +146,7 @@ export function LandingPage() {
               <span className="text-gradient">Simulated intelligently.</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
-              TwinPath builds an evidence-aware model of your profile, shows which role requirements you meet and which you don't, explains
+              The AI Career Guidance App builds an evidence-aware model of your profile, shows which role requirements you meet and which you don't, explains
               every estimate, and lets you test what-if changes before you commit months of effort.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -178,7 +178,7 @@ export function LandingPage() {
             <p className="eyebrow mb-3">Evidence, not just claims</p>
             <h2 className="text-3xl font-semibold sm:text-4xl">Every skill estimate says where it came from.</h2>
             <p className="mt-4 text-fg-muted">
-              A GitHub link or a confident self-rating isn't proof of competence. TwinPath ranks each signal by how trustworthy it is, and
+              A GitHub link or a confident self-rating isn't proof of competence. The app ranks each signal by how trustworthy it is, and
               uses the most trustworthy one available. When nothing has been measured, the skill is shown as <em>unknown</em> rather than
               silently counted as zero.
             </p>
@@ -248,7 +248,7 @@ export function LandingPage() {
               <HelpCircle className="size-5" />
               <p className="eyebrow !text-iris">Honest by design</p>
             </div>
-            <h3 className="text-2xl font-semibold">What TwinPath will never claim</h3>
+            <h3 className="text-2xl font-semibold">What the AI Career Guidance App will never claim</h3>
             <ul className="mt-6 space-y-4">
               {HONEST.map((h) => (
                 <li key={h} className="flex gap-3 text-sm text-fg-muted">

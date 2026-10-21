@@ -49,8 +49,8 @@ def verification_email(to: str, token: str) -> bool:
     link = f"{get_settings().public_app_url}/verify-email#token={token}"
     return send_email(
         to,
-        "Verify your TwinPath AI email address",
-        "Confirm your email address for TwinPath AI by opening this link (valid for 24 hours):\n\n"
+        "Verify your AI Career Guidance App email address",
+        "Confirm your email address for the AI Career Guidance App by opening this link (valid for 24 hours):\n\n"
         f"{link}\n\nIf you did not create an account, you can ignore this message.",
     )
 
@@ -58,8 +58,8 @@ def verification_email(to: str, token: str) -> bool:
 def account_exists_email(to: str) -> bool:
     return send_email(
         to,
-        "TwinPath AI registration attempt",
-        "Someone tried to register a TwinPath AI account with this email address, but an account "
+        "AI Career Guidance App registration attempt",
+        "Someone tried to register an AI Career Guidance App account with this email address, but an account "
         "already exists. If this was you, sign in or use 'Forgot password'. Otherwise no action is needed.",
     )
 
@@ -68,8 +68,8 @@ def password_reset_email(to: str, token: str) -> bool:
     link = f"{get_settings().public_app_url}/reset-password#token={token}"
     return send_email(
         to,
-        "Reset your TwinPath AI password",
-        "A password reset was requested for your TwinPath AI account. This link is valid for 30 minutes "
+        "Reset your AI Career Guidance App password",
+        "A password reset was requested for your AI Career Guidance App account. This link is valid for 30 minutes "
         f"and can be used once:\n\n{link}\n\nIf you did not request this, ignore this email; your password "
         "has not changed.",
     )
@@ -78,7 +78,7 @@ def password_reset_email(to: str, token: str) -> bool:
 def password_changed_email(to: str) -> bool:
     return send_email(
         to,
-        "Your TwinPath AI password was changed",
-        "Your TwinPath AI password was just changed and other sessions were signed out. "
+        "Your AI Career Guidance App password was changed",
+        "Your AI Career Guidance App password was just changed and other sessions were signed out. "
         "If this was not you, reset your password immediately and contact your administrator.",
     )

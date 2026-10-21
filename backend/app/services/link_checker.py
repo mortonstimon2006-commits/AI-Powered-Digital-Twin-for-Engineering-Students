@@ -20,7 +20,7 @@ from sqlalchemy.orm import Session
 
 from app.models import LearningResource
 
-USER_AGENT = "TwinPathLinkChecker/0.1 (+resource verification; contact: administrator)"
+USER_AGENT = "AICareerGuidanceLinkChecker/0.1 (+resource verification; contact: administrator)"
 MAX_REDIRECTS = 5
 
 

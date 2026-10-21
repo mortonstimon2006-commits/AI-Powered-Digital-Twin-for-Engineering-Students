@@ -45,7 +45,7 @@ from app.services.auth_service import POLICY_VERSION
 log = logging.getLogger("twinpath.privacy")
 
 CONSENT_INFO = {
-    "profile_processing": ("Process the profile data you enter to provide TwinPath's features.", True),
+    "profile_processing": ("Process the profile data you enter to provide the app's features.", True),
     "mentor_sharing": ("Let your assigned mentor view your digital twin and record assessments.", False),
     "research_use": (
         "Allow assessor labels and the profile snapshots they refer to to be used to train and evaluate future readiness models.",

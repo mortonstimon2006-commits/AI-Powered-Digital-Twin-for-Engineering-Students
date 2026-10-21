@@ -131,6 +131,48 @@ def test_registry_rejects_tampered_or_mismatched_artifacts(trained_artifact, tmp
         reg.load_artifact("drifted/model.joblib", sha256_file(copy / "model.joblib"), 1, "v")
 
 
+def test_deploy_init_registers_shipped_model_once(trained_artifact, tmp_path, monkeypatch):
+    from sqlalchemy import select
+
+    from app.config import get_settings
+    from app.db import system_session
+    from app.ml.artifacts import register_bundled
+    from app.models import ModelVersion
+
+    shutil.copytree(trained_artifact, tmp_path / trained_artifact.name)
+    tampered = tmp_path / "tampered"
+    shutil.copytree(trained_artifact, tampered)
+    (tampered / "model.joblib").write_bytes(b"not the trained model")
+    monkeypatch.setattr(get_settings(), "model_artifact_dir", tmp_path)
+
+    first = register_bundled()
+    assert first["activated"] == [trained_artifact.name]
+    assert first["rejected"] == ["tampered"]
+    again = register_bundled()  # every restart runs it: must be idempotent
+    assert again["activated"] == [] and again["registered"] == [trained_artifact.name]
+    with system_session() as db:
+        rows = db.scalars(select(ModelVersion)).all()
+    assert len(rows) == 1 and rows[0].status == "active"
+
+
+def test_engine_without_pool_holds_no_idle_connections(monkeypatch):
+    from sqlalchemy import text
+    from sqlalchemy.pool import NullPool
+
+    from app.config import get_settings
+    from app.db import get_engine
+
+    monkeypatch.setattr(get_settings(), "db_disable_pool", True)
+    engine = get_engine.__wrapped__()
+    try:
+        assert isinstance(engine.pool, NullPool)
+        with engine.connect() as conn:
+            assert conn.execute(text("SELECT 1")).scalar() == 1
+        assert engine.pool.status() == "NullPool"
+    finally:
+        engine.dispose()
+
+
 def test_prediction_consistency_and_ood_warning(readiness_model):
     from app.services.career.readiness import predict
 

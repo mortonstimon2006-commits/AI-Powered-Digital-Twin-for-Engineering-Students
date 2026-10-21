@@ -34,6 +34,12 @@ network**. It is **NOT VERIFIED for public production**. That needs: a real TLS 
 managed database with verified encryption at rest, a shared rate-limit store if more than one API process is run,
 an independent security review or penetration test, and a readiness model trained on real, consented labels.
 
+**Free hosting (Vercel + Render + Neon), added 2026-10-21:** the configuration was verified in a local
+simulation, not on the real services. The same image ran with Render's limits (512 MB, 0.1 CPU) against a fresh
+PostgreSQL 18 database set up like Neon (non-superuser owner role plus `infra/neon/setup.sql`); the automated
+smoke journey passed. **NOT VERIFIED:** the real accounts, TLS and channel binding to Neon, cookie behaviour
+through Vercel's forwarding, and the uptime pinger. See [free-hosting.md](operations/free-hosting.md).
+
 ## Known limitations and outstanding work
 
 ### Data and ML
@@ -65,8 +71,21 @@ an independent security review or penetration test, and a readiness model traine
   Switching to `xgboost-cpu` would slim it, but needs a lock change and re-test.
 * The API cold start takes about 20 s because of heavy imports.
 
+### Free hosting tiers
+* No Personalized Mentor (Render has no GPU/Ollama) and no email (Render's free plan blocks SMTP). Users who forget
+  their password cannot reset it.
+* Uploaded files are lost when the Render container restarts or sleeps; the extracted analysis stays in the database.
+* Cold start measured at 110–128 s at 0.1 CPU; Vercel gives up on forwarded requests after about 30 s, so an
+  uptime pinger on `/api/v1/health/live` is required.
+* Neon's free plan keeps only 6 hours of restore history; manual `pg_dump` backups are needed, and the restore path
+  on Neon is not verified.
+* The Render URL is public. Direct callers can spoof `X-Forwarded-For` and get around per-IP rate limits
+  (per-account limits still apply).
+
 ### Product
 * Assessments are recorded by mentors; there is no in-app test-taking engine.
 * GitHub/portfolio links are stored, not verified automatically; verification is a mentor decision.
+* Feedback is self-reported: ratings and comments are not a controlled evaluation. The admin list hides names and
+  emails, but rows stay linked to accounts in the database, so they are deleted along with the account.
 * The frontend has no light theme; the dark theme is the deliberate brand. Contrast has not been measured with
   tooling in a real browser (jsdom cannot).

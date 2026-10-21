@@ -501,54 +501,9 @@ def train(
 
 
 def register(artifact_dir: Path, activate: bool) -> int:
-    from sqlalchemy import select, update
+    from app.ml.artifacts import register_artifact
 
-    from app.config import get_settings
-    from app.db import system_session
-    from app.ml.registry import sha256_file
-    from app.models import ModelVersion
-
-    manifest = json.loads((artifact_dir / "manifest.json").read_text(encoding="utf-8"))
-    base = get_settings().model_artifact_dir.resolve()
-    rel = (artifact_dir / "model.joblib").resolve().relative_to(base).as_posix()
-    sha = sha256_file(artifact_dir / "model.joblib")
-    assert sha == manifest["model_file_sha256"], "artifact checksum does not match manifest"
-    with system_session() as db:
-        existing = db.scalar(select(ModelVersion).where(ModelVersion.version == manifest["version"]))
-        if existing:
-            mv = existing
-        else:
-            mv = ModelVersion(
-                version=manifest["version"],
-                kind=manifest["kind"],
-                algorithm=manifest["algorithm"],
-                target=manifest["target"]["name"],
-                status="candidate",
-                is_synthetic=manifest["dataset"]["is_synthetic"],
-                dataset_ref={k: manifest["dataset"][k] for k in ("source", "sha256", "splits", "is_synthetic")},
-                metrics={
-                    "test": manifest["metrics"]["test_calibrated"],
-                    "ci95": manifest["metrics"]["test_ci95"],
-                    "calibration": {k: v for k, v in manifest["calibration"].items() if k != "reliability_test"},
-                },
-                feature_schema={"hash": manifest["feature_schema_hash"], "features": [f["name"] for f in manifest["features"]]},
-                artifact_path=rel,
-                artifact_sha256=sha,
-                trained_at=datetime.fromisoformat(manifest["created_at"]),
-                notes="; ".join(manifest["limitations"][:2]),
-            )
-            db.add(mv)
-            db.flush()
-        if activate:
-            db.execute(
-                update(ModelVersion)
-                .where(ModelVersion.kind == mv.kind, ModelVersion.status == "active", ModelVersion.id != mv.id)
-                .values(status="retired")
-            )
-            db.flush()
-            mv.status = "active"
-            mv.activated_at = datetime.now(UTC)
-        return mv.id
+    return register_artifact(artifact_dir, activate)
 
 
 def main(argv: list[str] | None = None) -> int:

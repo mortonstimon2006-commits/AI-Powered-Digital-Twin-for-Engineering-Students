@@ -304,7 +304,7 @@ def compare(body: CompareIn, principal: CurrentUser, db: DB) -> dict[str, Any]:
         },
         "closest_roles": role_overlap[:3],
         "note": (
-            "Comparison uses skills recognised from the TwinPath catalogue. 'Claimed' means self-reported or "
+            "Comparison uses skills recognised from the app's skill catalogue. 'Claimed' means self-reported or "
             "unverified; 'missing' means not recorded in your twin. This is not a hiring assessment."
         ),
     }

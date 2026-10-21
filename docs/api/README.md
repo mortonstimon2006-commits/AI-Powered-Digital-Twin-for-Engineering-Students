@@ -1,7 +1,7 @@
 # API reference
 
-* Machine-readable specification: [`openapi.json`](openapi.json) (OpenAPI 3.1, generated from the code: 105 paths,
-  123 operations).
+* Machine-readable specification: [`openapi.json`](openapi.json) (OpenAPI 3.1, generated from the code: 106 paths,
+  124 operations).
 * Interactive docs in development: `http://localhost:5173/api/docs` (Swagger) and `/api/redoc`. They are
   **disabled by default in staging and production** (`ENABLE_API_DOCS`).
 * Base path: `/api/v1`. Every route is versioned.
@@ -32,4 +32,4 @@
 | documents | `/documents` | 8 | upload, JD paste, download (attachment), delete, confirm skills, compare |
 | privacy | `/privacy`, `/feedback` | 7 | consents, policy, export, account deletion, feedback |
 | mentor-tools | `/staff` | 7 | mentor/admin only; requires assignment **and** student consent |
-| admin | `/admin` | 25 | admin only; every mutation is audited |
+| admin | `/admin` | 26 | admin only; every mutation is audited; feedback list is returned without user identity |

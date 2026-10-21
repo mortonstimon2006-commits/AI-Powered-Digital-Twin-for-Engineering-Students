@@ -12,9 +12,9 @@ Exceptions are scoped by advisory ID in CI (`--ignore-vuln`), never by package.
 | PYSEC-2026-3815 / CVE-2026-45831 | `SimpleRBACAuthorizationProvider` ignores tenant/database scope | none yet |
 | PYSEC-2026-3813 / CVE-2026-45830 | Missing tenant authorisation in the server API | none yet |
 
-**Why it is not reachable in TwinPath:** all four issues are in Chroma's **HTTP server** and its auth providers.
-TwinPath uses only the embedded `chromadb.PersistentClient` inside the API process. No Chroma server is started,
-no Chroma port exists in any compose file, and collections are created only by TwinPath code with a fixed
+**Why it is not reachable in the AI Career Guidance App:** all four issues are in Chroma's **HTTP server** and its auth providers.
+The AI Career Guidance App uses only the embedded `chromadb.PersistentClient` inside the API process. No Chroma server is started,
+no Chroma port exists in any compose file, and collections are created only by the app's code with a fixed
 configuration and `embedding_function=None` (embeddings come from Ollama). Users cannot influence collection
 configuration or model loading.
 

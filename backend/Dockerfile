@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-# TwinPath API image. Build context: repository root (the knowledge base lives in /knowledge).
+# AI Career Guidance App API image. Build context: repository root (the knowledge base lives in /knowledge).
 #   docker build -f backend/Dockerfile -t twinpath-api .
 # Base images are pinned by version AND digest; bump deliberately and re-run the test suite.
 
@@ -23,6 +23,10 @@ RUN groupadd --system --gid 10001 twinpath \
 WORKDIR /app
 COPY --from=build --chown=root:root /app /app
 COPY --chown=root:root knowledge /knowledge
+# Model artifacts shipped with the image (registered at start-up by `app.cli deploy-init` on hosts
+# without a separate migration job). docker-compose mounts its own artifact directory over this path.
+COPY --chown=root:root backend/artifacts/bundled /app/artifacts/models
+COPY --chown=root:root backend/scripts/start-hosted.sh /app/start-hosted.sh
 ENV PATH=/app/.venv/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \

@@ -25,7 +25,7 @@ export function ProfilePage() {
   return (
     <div>
       <PageHeader icon={UserRound} eyebrow="Digital twin" title="Twin profile"
-        description={`Everything TwinPath knows about you, versioned. Current twin version: v${profile.data?.twin_version ?? "—"}.`} />
+        description={`Everything the app knows about you, versioned. Current twin version: v${profile.data?.twin_version ?? "—"}.`} />
       <Tabs value={tab} onValueChange={(v) => setParams({ tab: v }, { replace: true })}
         items={[
           { value: "academic", label: "Academic" },

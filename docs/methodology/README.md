@@ -1,6 +1,6 @@
 # Methodology
 
-TwinPath separates four questions that are easy to conflate. Each has its own documented method.
+The AI Career Guidance App separates four questions that are easy to conflate. Each has its own documented method.
 
 | Question | Component | Method | Never claims |
 |---|---|---|---|

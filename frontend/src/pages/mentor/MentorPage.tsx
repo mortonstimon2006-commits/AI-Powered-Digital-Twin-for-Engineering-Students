@@ -84,11 +84,11 @@ function AssistantBubble({ m }: { m: Msg }) {
           {m.error && <Notice tone="danger" className="mt-2">{m.error}</Notice>}
           {m.unverified && m.unverified.length > 0 && (
             <Notice tone="warn" className="mt-3" icon={<AlertTriangle className="size-4" />} title="Check these numbers">
-              This answer mentions {m.unverified.join(", ")}, which do not appear in your TwinPath record or the retrieved sources.
+              This answer mentions {m.unverified.join(", ")}, which do not appear in your profile record or the retrieved sources.
             </Notice>
           )}
           {m.removedLinks ? (
-            <p className="mt-2 text-xs text-fg-faint">{m.removedLinks} link(s) the model wrote were removed because they are not in TwinPath's verified resource catalogue.</p>
+            <p className="mt-2 text-xs text-fg-faint">{m.removedLinks} link(s) the model wrote were removed because they are not in the app's verified resource catalogue.</p>
           ) : null}
           {m.status === "cancelled" && <p className="mt-2 text-xs text-fg-faint">Generation stopped.</p>}
           <SourceList sources={m.sources ?? []} highlight={cite} />
@@ -146,7 +146,7 @@ export function MentorPage() {
       }, controller.signal);
     } catch (e) {
       if ((e as Error).name === "AbortError") patch((m) => ({ ...m, pending: false, status: "cancelled" }));
-      else patch((m) => ({ ...m, pending: false, error: e instanceof ApiError ? e.message : "The mentor request failed." }));
+      else patch((m) => ({ ...m, pending: false, error: e instanceof ApiError ? e.message : "The Personalized Mentor request failed." }));
     } finally {
       setBusy(false);
       abort.current = null;
@@ -157,8 +157,8 @@ export function MentorPage() {
   const online = status.data?.available;
   return (
     <div>
-      <PageHeader icon={Bot} eyebrow="Local AI mentor" title="Career mentor"
-        description="Answers are grounded in your TwinPath record and retrieved guidance documents. The model runs locally; nothing is sent to an external AI service." />
+      <PageHeader icon={Bot} eyebrow="Runs locally and privately" title="Personalized Mentor"
+        description="Answers are grounded in your profile record and retrieved guidance documents. The model runs locally; nothing is sent to an external AI service." />
       <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
         <Card className="h-fit p-3">
           <Button className="w-full" variant="secondary" onClick={() => { setConversationId(null); setMessages([]); }}><MessageSquarePlus className="size-4" /> New conversation</Button>
@@ -187,14 +187,14 @@ export function MentorPage() {
           </div>
           <div className="flex-1 space-y-6 overflow-y-auto px-4 py-5" aria-live="polite">
             {!online && !status.isLoading && (
-              <Notice tone="warn" title="The local mentor is offline">The Ollama service or the configured model isn't running, so no answers are generated. Everything else in TwinPath keeps working.</Notice>
+              <Notice tone="warn" title="The Personalized Mentor is offline">The Ollama service or the configured model isn't running, so no answers are generated. Everything else in the app keeps working.</Notice>
             )}
             {status.error && <ErrorState error={status.error} />}
             {!messages.length ? (
               <div className="mx-auto max-w-xl py-10 text-center">
                 <div className="mx-auto mb-4 grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-aurora/20 to-iris/20"><Bot className="size-6 text-aurora" /></div>
                 <h2 className="text-lg font-semibold">Ask about your twin, roles, gaps or your plan</h2>
-                <p className="mt-1 text-sm text-fg-muted">The mentor sees your profile summary and retrieved guidance. It is instructed never to invent scores, skills or job openings.</p>
+                <p className="mt-1 text-sm text-fg-muted">The Personalized Mentor sees your profile summary and retrieved guidance. It is instructed never to invent scores, skills or job openings.</p>
                 <div className="mt-6 grid gap-2 sm:grid-cols-2">
                   {STARTERS.map((s) => <button key={s} type="button" disabled={!online} onClick={() => send(s)} className="rounded-xl border border-line bg-ink-800/50 p-3 text-left text-sm text-fg-muted transition hover:border-aurora/40 hover:text-fg disabled:opacity-50">{s}</button>)}
                 </div>
@@ -217,7 +217,7 @@ export function MentorPage() {
           </div>
           <form className="border-t border-line p-3" onSubmit={(e) => { e.preventDefault(); void send(input); }}>
             <div className="flex items-end gap-2">
-              <Textarea aria-label="Your question" className="max-h-40 min-h-12 flex-1 resize-y" placeholder={online ? "Ask the mentor… (Enter to send, Shift+Enter for a new line)" : "Mentor unavailable"}
+              <Textarea aria-label="Your question" className="max-h-40 min-h-12 flex-1 resize-y" placeholder={online ? "Ask your Personalized Mentor… (Enter to send, Shift+Enter for a new line)" : "Mentor unavailable"}
                 value={input} maxLength={2000} disabled={!online} onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(input); } }} />
               {busy ? (

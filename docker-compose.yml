@@ -1,4 +1,4 @@
-# TwinPath AI — local development / pilot stack.
+# AI Career Guidance App — local development / pilot stack.
 #   docker compose up -d db                 # database only (run backend + frontend natively)
 #   docker compose --profile app up -d      # full stack in containers -> http://localhost:8080
 # Ollama runs on the HOST by default (GPU drivers live there) and is reached via

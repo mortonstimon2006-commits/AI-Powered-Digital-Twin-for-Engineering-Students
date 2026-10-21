@@ -33,7 +33,7 @@ def role_guides(db: Session) -> list[tuple[str, str, str]]:
     out = []
     for role in cat.roles.values():
         lines = [
-            f"# {role.name} — TwinPath role requirements (version {role.version})",
+            f"# {role.name} — AI Career Guidance App role requirements (version {role.version})",
             "",
             role.description,
             "",

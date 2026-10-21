@@ -1,8 +1,8 @@
-# TwinPath AI
+# AI Career Guidance App
 
-**An explainable, evidence-aware career digital twin for engineering students**, with a local AI mentor.
+**An explainable, evidence-aware career digital twin for engineering students**, with a local Personalized Mentor.
 
-TwinPath keeps a versioned record of a student's academics, skills and evidence. It compares that record with
+The AI Career Guidance App keeps a versioned record of a student's academics, skills and evidence. It compares that record with
 versioned role specifications, estimates assessor-judged interview readiness with a calibrated, explained model,
 simulates what-if changes on an isolated copy of the twin, and turns gaps into a prerequisite-ordered roadmap.
 A retrieval-augmented mentor runs **entirely locally** through Ollama.
@@ -22,8 +22,9 @@ A retrieval-augmented mentor runs **entirely locally** through Ollama.
 | What-if simulator | Hypothetical changes on a deep copy using the same pipeline; scenarios saved and compared | methodology §3 |
 | Knowledge graph | NetworkX graph with provenance-labelled edges, insights queries, 3D and accessible 2D views | methodology §5 |
 | Roadmap | Prerequisite-ordered, time-boxed plan from real gaps; progress; regeneration with diff | methodology §4 |
-| AI mentor | Local qwen3:8b + nomic-embed-text, owner-scoped RAG over Chroma, injection filtering, link sanitisation | [RAG evaluation](docs/reports/rag-evaluation.md) |
+| Personalized Mentor | Local qwen3:8b + nomic-embed-text, owner-scoped RAG over Chroma, injection filtering, link sanitisation | [RAG evaluation](docs/reports/rag-evaluation.md) |
 | Resume & JD | Sandboxed PDF/DOCX/TXT parsing, skill extraction, writing suggestions, JD comparison | — |
+| Feedback | "Send feedback" on every signed-in page (area, 1–5 rating, comment); admin Feedback tab lists comments without names or emails, refreshed every 30 s | [free hosting](docs/operations/free-hosting.md) |
 | Mentor & admin tools | Consent-gated student overview, verification, assessments, assessor labels; users, roles, resources, models, knowledge base, audit | [API](docs/api/README.md) |
 
 ## Requirements
@@ -94,6 +95,14 @@ docker compose --profile app up -d --build
 This runs migrations and the seed, then serves the app at http://localhost:8080. Ollama stays on the host. See the
 [deployment guide](docs/operations/deployment.md) for topologies, TLS, environments and rollback.
 
+## Free hosting (Vercel + Render + Neon)
+
+[`render.yaml`](render.yaml), [`frontend/vercel.json`](frontend/vercel.json) and
+[`infra/neon/setup.sql`](infra/neon/setup.sql) put the app online at no cost. The website is on Vercel, the API
+runs on Render's free plan and the data is in Neon's free PostgreSQL 18. On the free tiers the
+**Personalized Mentor and email are unavailable** (no GPU on Render, and SMTP is blocked).
+Step-by-step guide, measured limits and backups: [docs/operations/free-hosting.md](docs/operations/free-hosting.md).
+
 ## Testing
 
 The backend tests use the test database (`TEST_DATABASE_URL`), so `docker compose up -d db` must be running:
@@ -124,14 +133,15 @@ The RAG evaluation needs Ollama with both models. It uses (and truncates) the **
 cd backend && uv run python -m eval.run_rag_eval
 ```
 
-| Suite | Result (2026-10-14) |
+| Suite | Result |
 |---|---|
-| Backend (pytest, real PostgreSQL 18, app role + RLS) | 94 passed |
-| Frontend (Vitest + Testing Library + axe) | 25 passed |
-| End-to-end (Playwright, desktop + mobile) | 6 passed against dev servers **and** against the containers |
-| RAG evaluation (local qwen3:8b) | retrieval hit@1 1.00 (24 q) · generation 9/9 scenarios |
-| Static checks | ruff, mypy (79 files: app, ML pipeline, eval), ESLint, `tsc --strict`: clean |
-| Security scans | gitleaks clean · npm audit 0 · pip-audit 0 after 4 documented, unreachable Chroma-server exceptions |
+| Backend (pytest, real PostgreSQL 18, app role + RLS) | 97 passed (2026-10-21) |
+| Frontend (Vitest + Testing Library + axe) | 26 passed (2026-10-21) |
+| End-to-end (Playwright, desktop + mobile) | 6 passed against dev servers (2026-10-21); last run against the containers on 2026-10-14, before the rename and the feedback feature |
+| RAG evaluation (local qwen3:8b) | retrieval hit@1 1.00 (24 q) · generation 9/9 scenarios (2026-10-21, after the rename) |
+| Free-hosting simulation (512 MB, 0.1 CPU, Neon-style database) | smoke journey passed (2026-10-21); see [free hosting](docs/operations/free-hosting.md) |
+| Static checks | ruff, mypy (80 files: app, ML pipeline, eval), ESLint, `tsc --strict`: clean (2026-10-21) |
+| Security scans | gitleaks clean (2026-10-21) · npm audit 0 · pip-audit 0 after 4 documented, unreachable Chroma-server exceptions (2026-10-14; dependencies unchanged since) |
 
 ## Repository layout
 
@@ -150,6 +160,7 @@ docs/       architecture, API, methodology, ML cards, security, operations, repo
 [RAG evaluation](docs/reports/rag-evaluation.md) · [Threat model](docs/security/threat-model.md) ·
 [Security checklist](docs/security/checklist.md) ·
 [Incident response](docs/security/incident-response.md) · [Deployment & rollback](docs/operations/deployment.md) ·
+[Free hosting](docs/operations/free-hosting.md) ·
 [Backup & restore](docs/operations/backup-restore.md) · [Research framing](docs/research.md) ·
 [Status & limitations](docs/status-and-limitations.md)
 

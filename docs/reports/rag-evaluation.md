@@ -34,7 +34,7 @@ database and a temporary data directory.
 * Automated checks are coarse (string and regex criteria). They catch specific failure modes, not answer quality.
   The answers are in `rag-eval.md` for human review.
 * Manual review also found **residual minor inaccuracies** not caught by the checks. For example, one answer
-  suggested self-rating "on a scale of 1–10" (TwinPath uses 0–4). Students should treat mentor output as advice
+  suggested self-rating "on a scale of 1–10" (the app uses 0–4). Students should treat mentor output as advice
   and verify it.
 * Structural guarantees hold regardless of model behaviour, because they do not depend on the LLM. These are
   owner-scoped retrieval, injection-flagged passages never reaching the model, no tool access, and removal of

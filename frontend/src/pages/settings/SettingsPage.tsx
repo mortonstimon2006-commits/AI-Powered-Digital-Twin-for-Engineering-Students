@@ -153,7 +153,7 @@ function PrivacyTab() {
       </Card>
       <Card>
         <CardHeader title="Export your data" description="A complete JSON export of everything stored about you (secrets excluded)." />
-        <CardBody><Button variant="secondary" onClick={() => download("/privacy/export", "twinpath-export.json").catch(() => toast.error("Export failed."))}><Download className="size-4" /> Download export</Button></CardBody>
+        <CardBody><Button variant="secondary" onClick={() => download("/privacy/export", "ai-career-guidance-export.json").catch(() => toast.error("Export failed."))}><Download className="size-4" /> Download export</Button></CardBody>
       </Card>
       <Card className="border-danger/30">
         <CardHeader title="Delete account" description="Permanently deletes your profile, documents, conversations and all derived data. This cannot be undone." />
@@ -162,7 +162,7 @@ function PrivacyTab() {
           <Field label='Type "DELETE MY ACCOUNT" to confirm'>{({ id }) => <Input id={id} value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />}</Field>
           <ConfirmButton
             trigger={<Button variant="danger" disabled={!pw || confirmText !== "DELETE MY ACCOUNT"}><Trash2 className="size-4" /> Delete my account</Button>}
-            title="Delete your account permanently?" description="All of your data, files and mentor history are erased immediately. You will be signed out."
+            title="Delete your account permanently?" description="All of your data, files and Personalized Mentor history are erased immediately. You will be signed out."
             confirmLabel="Delete permanently"
             onConfirm={async () => {
               try {

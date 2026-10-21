@@ -4,7 +4,7 @@ title: Preparing for entry-level technical interviews
 
 # Preparing for entry-level technical interviews
 
-Hiring processes differ between organisations, and TwinPath has no access to any company's interview process. This guide describes common formats and preparation habits that are widely useful.
+Hiring processes differ between organisations, and the AI Career Guidance App has no access to any company's interview process. This guide describes common formats and preparation habits that are widely useful.
 
 ## Common interview stages
 
@@ -38,7 +38,7 @@ Structure stories as **Situation, Task, Action, Result**. Keep the focus on your
 
 ## Mock interviews
 
-Mock interviews with a mentor are one of the most effective preparation methods because they give feedback on communication as well as correctness. In TwinPath, a mentor can record the mock-interview result as a verified assessment, which strengthens your digital twin.
+Mock interviews with a mentor are one of the most effective preparation methods because they give feedback on communication as well as correctness. In the AI Career Guidance App, a mentor can record the mock-interview result as a verified assessment, which strengthens your digital twin.
 
 ## On the day
 

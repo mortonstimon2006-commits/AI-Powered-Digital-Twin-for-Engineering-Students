@@ -122,6 +122,40 @@ def audit_log(
     }
 
 
+@router.get("/feedback")
+def feedback_list(
+    admin: AdminUser,
+    db: DB,
+    target_type: str | None = Query(default=None, max_length=24),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+) -> dict[str, Any]:
+    """Recent feedback, newest first. Anonymous by design: no user identity is returned, so
+    administrators can read what people wrote without seeing who wrote it."""
+    with privileged_scope(db):
+        q = select(UserFeedback)
+        if target_type:
+            q = q.where(UserFeedback.target_type == target_type)
+        total = db.scalar(select(func.count()).select_from(q.subquery())) or 0
+        rows = db.scalars(q.order_by(UserFeedback.created_at.desc()).limit(limit).offset(offset)).all()
+    return {
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "items": [
+            {
+                "id": f.id,
+                "created_at": f.created_at,
+                "target_type": f.target_type,
+                "target_id": f.target_id,
+                "rating": f.rating,
+                "comment": f.comment,
+            }
+            for f in rows
+        ],
+    }
+
+
 @router.get("/feedback/summary")
 def feedback_summary(admin: AdminUser, db: DB) -> dict[str, Any]:
     with privileged_scope(db):

@@ -1,10 +1,10 @@
 ---
-title: How TwinPath AI works — methodology and limitations
+title: How the AI Career Guidance App works — methodology and limitations
 ---
 
-# How TwinPath AI works
+# How the AI Career Guidance App works
 
-TwinPath AI keeps a digital twin of each student: a structured, versioned record of academic details, skills, practical evidence (projects, internships, certifications), assessments and goals. Several independent components read this twin. Each one answers a different question, and none of them predicts whether a student will be hired.
+The AI Career Guidance App keeps a digital twin of each student: a structured, versioned record of academic details, skills, practical evidence (projects, internships, certifications), assessments and goals. Several independent components read this twin. Each one answers a different question, and none of them predicts whether a student will be hired.
 
 ## Skill estimates and evidence trust
 
@@ -20,7 +20,7 @@ A GitHub link or an uploaded certificate is not proof of competence by itself. I
 
 ## Role match and skill gaps
 
-Each career role has a versioned requirement specification: required skills, the expected proficiency level, an importance weight, whether the skill is core or optional, and what kind of evidence is expected. The specification was written by the TwinPath team as an engineering synthesis of common entry-level expectations. It was not derived from a job-postings dataset, and the weights are expert judgements awaiting validation.
+Each career role has a versioned requirement specification: required skills, the expected proficiency level, an importance weight, whether the skill is core or optional, and what kind of evidence is expected. The specification was written by the project team as an engineering synthesis of common entry-level expectations. It was not derived from a job-postings dataset, and the weights are expert judgements awaiting validation.
 
 The **match score** is the importance-weighted share of requirements the student currently meets. Unknown skills count as "not demonstrated", so the score is reported together with an **upper bound**: the score the student would have if every unknown skill turned out to meet its requirement. The match score compares a profile with a framework. It is **not** a probability of being hired.
 
@@ -45,6 +45,6 @@ The simulator copies the student's twin, changes only the selected inputs, and r
 
 Roadmaps are generated from the current skill gaps for a target role. Prerequisites are ordered first, and the plan is scheduled against the student's weekly study hours. Effort ranges are planning estimates. Completing a roadmap item does not raise a skill estimate by itself; mastery must be shown through evidence or a verified assessment.
 
-## The AI mentor
+## The Personalized Mentor
 
-The mentor runs a language model **locally** through Ollama. Prompts and student data are not sent to any external AI service. The mentor receives a summary of the student's twin from TwinPath's database, plus passages retrieved from this knowledge base and the student's own uploaded documents. It is instructed never to invent scores, skills, job openings or outcomes, and to say when information is not recorded. Its advice is generated text and can still be wrong, so important decisions should be discussed with a human mentor.
+The Personalized Mentor runs a language model **locally** through Ollama. Prompts and student data are not sent to any external AI service. The Personalized Mentor receives a summary of the student's twin from the app's database, plus passages retrieved from this knowledge base and the student's own uploaded documents. It is instructed never to invent scores, skills, job openings or outcomes, and to say when information is not recorded. Its advice is generated text and can still be wrong, so important decisions should be discussed with a human mentor.

@@ -48,6 +48,9 @@ class Settings(BaseSettings):
     db_pool_size: int = Field(default=10, ge=1, le=50)
     db_max_overflow: int = Field(default=5, ge=0, le=50)
     db_pool_timeout_seconds: int = Field(default=10, ge=1, le=60)
+    # Open a fresh connection per request instead of keeping a pool. Use with serverless Postgres
+    # (e.g. Neon) so idle pooled connections never keep the database compute awake.
+    db_disable_pool: bool = False
 
     # --- security ---
     secret_key: SecretStr
@@ -65,7 +68,7 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_username: str = ""
     smtp_password: SecretStr = SecretStr("")
-    smtp_from: str = "TwinPath AI <no-reply@example.invalid>"
+    smtp_from: str = "AI Career Guidance App <no-reply@example.invalid>"
     require_email_verification: bool = False
     public_app_url: str = "http://localhost:5173"
 
@@ -92,6 +95,17 @@ class Settings(BaseSettings):
     @classmethod
     def _resolve_relative(cls, v: Path) -> Path:
         return v if v.is_absolute() else (BACKEND_DIR / v).resolve()
+
+    @field_validator("database_url", "migration_database_url", mode="before")
+    @classmethod
+    def _use_psycopg_driver(cls, v: object) -> object:
+        # Hosted providers (Neon, Render, ...) hand out postgres:// or postgresql:// URLs, which
+        # SQLAlchemy would map to the uninstalled psycopg2 driver.
+        if isinstance(v, str):
+            for prefix in ("postgres://", "postgresql://"):
+                if v.startswith(prefix):
+                    return "postgresql+psycopg://" + v[len(prefix) :]
+        return v
 
     @property
     def origins(self) -> list[str]:

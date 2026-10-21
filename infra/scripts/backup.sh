@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Logical backup of the TwinPath database (custom format, compressed) from the compose `db` service.
+# Logical backup of the AI Career Guidance App database (custom format, compressed) from the compose `db` service.
 #   sh infra/scripts/backup.sh                 -> backups/twinpath-<UTC timestamp>.dump (+ .sha256)
 # Backups contain personal data: store them encrypted (e.g. on an encrypted volume or with
 # `age`/`gpg`), restrict access, and apply the same retention policy as the live data.

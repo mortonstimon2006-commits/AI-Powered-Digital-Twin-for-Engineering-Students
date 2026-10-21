@@ -18,11 +18,11 @@ For practical skills, build something small first and then read the documentatio
 
 ## Learn prerequisites first
 
-Many skills depend on others. Machine learning depends on Python, statistics and some linear algebra; React depends on JavaScript, HTML and CSS. TwinPath's roadmap orders prerequisites first for this reason. Skipping them usually costs more time later.
+Many skills depend on others. Machine learning depends on Python, statistics and some linear algebra; React depends on JavaScript, HTML and CSS. The app's roadmap orders prerequisites first for this reason. Skipping them usually costs more time later.
 
 ## Plan around your real availability
 
-Set a realistic number of weekly hours. A consistent 6 hours a week often beats an ambitious 20 hours that collapses after two weeks. You can update your weekly hours in TwinPath and regenerate your roadmap whenever your schedule changes.
+Set a realistic number of weekly hours. A consistent 6 hours a week often beats an ambitious 20 hours that collapses after two weeks. You can update your weekly hours in the AI Career Guidance App and regenerate your roadmap whenever your schedule changes.
 
 ## Track evidence, not just hours
 
@@ -30,4 +30,4 @@ Progress is shown by what you can do, not by how long you studied. After finishi
 
 ## Use resources critically
 
-Prefer official documentation and well-maintained open materials. Check the date of tutorials, because tools change quickly. In TwinPath, links marked "unverified" could not be checked automatically, so confirm they still work before relying on them.
+Prefer official documentation and well-maintained open materials. Check the date of tutorials, because tools change quickly. In the AI Career Guidance App, links marked "unverified" could not be checked automatically, so confirm they still work before relying on them.

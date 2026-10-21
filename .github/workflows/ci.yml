@@ -71,7 +71,7 @@ jobs:
       - name: Tests (real PostgreSQL; Ollama-dependent tests are excluded by design)
         run: uv run pytest -q -m "not ollama"
       - name: Dependency audit (known vulnerabilities)
-        # Documented exceptions: Chroma HTTP-server CVEs that are unreachable because TwinPath only uses the
+        # Documented exceptions: Chroma HTTP-server CVEs that are unreachable because the app only uses the
         # embedded PersistentClient. See docs/security/dependency-exceptions.md (re-review on every chromadb release).
         run: >-
           uv run pip-audit --skip-editable

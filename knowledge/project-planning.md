@@ -8,7 +8,7 @@ A good portfolio project demonstrates the specific skills your target role needs
 
 ## Choose the project from your gaps
 
-Start from your highest-priority skill gaps in TwinPath. Pick a project that exercises two or three of them together. For example, a data-analyst candidate missing SQL and BI tools could build a dashboard on a public dataset, with the SQL used for data preparation.
+Start from your highest-priority skill gaps in the AI Career Guidance App. Pick a project that exercises two or three of them together. For example, a data-analyst candidate missing SQL and BI tools could build a dashboard on a public dataset, with the SQL used for data preparation.
 
 ## Break the project into milestones
 
@@ -25,7 +25,7 @@ Aim for each milestone to fit within one or two weeks of your available study ho
 - Keep the code in a version-controlled repository with meaningful commits.
 - Include a README a reviewer can follow to run the project.
 - Deploy it if the role values deployment (web, backend, ML engineering).
-- In TwinPath, add the project to your twin, link the skills it demonstrates at an honest level, and request verification from a mentor.
+- In the AI Career Guidance App, add the project to your twin, link the skills it demonstrates at an honest level, and request verification from a mentor.
 
 ## Avoid common mistakes
 

@@ -1,6 +1,6 @@
 # Threat model
 
-Scope: the TwinPath web SPA, FastAPI API, PostgreSQL, the embedded Chroma store, the local Ollama runtime and
+Scope: the AI Career Guidance App web SPA, FastAPI API, PostgreSQL, the embedded Chroma store, the local Ollama runtime and
 uploaded files. Method: STRIDE-style review per asset and trust boundary.
 
 Operator go-live steps: [security checklist](checklist.md).

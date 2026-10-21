@@ -211,5 +211,5 @@ def analyse_job_description(text: str, catalogue: Catalogue) -> dict[str, Any]:
     return {
         "skills": skills,
         "word_count": len(text.split()),
-        "note": "Skills are matched against the TwinPath catalogue; requirements outside it are not detected.",
+        "note": "Skills are matched against the app's skill catalogue; requirements outside it are not detected.",
     }

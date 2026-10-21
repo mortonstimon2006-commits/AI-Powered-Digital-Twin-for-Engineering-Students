@@ -99,7 +99,7 @@ export function DashboardPage() {
     <div>
       <PageHeader icon={LayoutDashboard} eyebrow="Dashboard" title={`Welcome back${firstName ? `, ${firstName}` : ""}`}
         description="A live summary of your digital twin. Everything here is computed from your recorded profile."
-        actions={<><Button asChild variant="secondary"><Link to="/app/simulator">Try a what-if</Link></Button><Button asChild><Link to="/app/mentor"><Bot className="size-4" /> Ask the mentor</Link></Button></>} />
+        actions={<><Button asChild variant="secondary"><Link to="/app/simulator">Try a what-if</Link></Button><Button asChild><Link to="/app/mentor"><Bot className="size-4" /> Ask your Personalized Mentor</Link></Button></>} />
 
       <Stagger className="grid gap-5 lg:grid-cols-12">
         <StaggerItem className="lg:col-span-7">
@@ -209,7 +209,7 @@ export function DashboardPage() {
               <div className="mt-5 flex items-center justify-between rounded-lg border border-line bg-ink-800/50 p-3">
                 <div className="flex items-center gap-2 text-sm">
                   <Bot className="size-4 text-aurora" />
-                  <span>{mentor.data?.available ? "Local mentor is online" : "Local mentor is offline"}</span>
+                  <span>{mentor.data?.available ? "Personalized Mentor is online" : "Personalized Mentor is offline"}</span>
                 </div>
                 <Button asChild size="sm" variant={mentor.data?.available ? "subtle" : "secondary"}><Link to="/app/mentor">Open</Link></Button>
               </div>

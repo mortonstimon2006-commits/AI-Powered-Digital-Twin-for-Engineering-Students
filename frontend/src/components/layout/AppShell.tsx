@@ -25,6 +25,7 @@ import { useState, type ComponentType } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 
+import { FeedbackButton } from "@/components/FeedbackButton";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { useMe, useMentorStatus } from "@/lib/queries";
@@ -64,7 +65,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
     group: "Plan & guidance",
     items: [
       { to: "/app/roadmap", label: "Roadmap", icon: Route },
-      { to: "/app/mentor", label: "AI mentor", icon: Bot },
+      { to: "/app/mentor", label: "Personalized Mentor", icon: Bot },
       { to: "/app/documents", label: "Resume & JD", icon: FileText },
     ],
   },
@@ -128,9 +129,9 @@ function MentorDot() {
   const { data } = useMentorStatus();
   const ok = data?.available;
   return (
-    <span className="inline-flex items-center gap-2 text-xs text-fg-muted" title={ok ? "Local mentor online" : "Local mentor unavailable"}>
+    <span className="inline-flex items-center gap-2 text-xs text-fg-muted" title={ok ? "Personalized Mentor online" : "Personalized Mentor unavailable"}>
       <span className={cn("size-2 rounded-full", ok ? "bg-ok shadow-[0_0_8px] shadow-ok/60" : "bg-fg-faint")} />
-      {ok ? "Mentor online" : "Mentor offline"}
+      {ok ? "Personalized Mentor online" : "Personalized Mentor offline"}
     </span>
   );
 }
@@ -165,6 +166,7 @@ export function AppShell() {
           <p className="truncate text-xs text-fg-faint capitalize">{role}</p>
         </div>
       </div>
+      <FeedbackButton />
       <div className="flex gap-1">
         <Button variant="ghost" size="sm" className="flex-1 justify-start" onClick={() => navigate("/app/settings")}>
           <Settings className="size-4" /> Settings
@@ -204,7 +206,7 @@ export function AppShell() {
             <RD.Content className="fixed inset-y-0 right-0 z-50 flex w-[min(85vw,320px)] flex-col gap-6 overflow-y-auto border-l border-line bg-ink-850 px-4 py-5">
               <div className="flex items-center justify-between">
                 <RD.Title className="font-display font-semibold">Navigation</RD.Title>
-                <RD.Description className="sr-only">TwinPath sections</RD.Description>
+                <RD.Description className="sr-only">AI Career Guidance App sections</RD.Description>
                 <RD.Close asChild>
                   <Button variant="ghost" size="icon" aria-label="Close navigation">
                     <X className="size-5" />

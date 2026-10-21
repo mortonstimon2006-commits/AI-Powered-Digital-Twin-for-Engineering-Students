@@ -1,5 +1,5 @@
 #!/bin/sh
-# Bootstraps least-privilege roles for TwinPath. Runs ONCE, on first container start,
+# Bootstraps least-privilege roles for the AI Career Guidance App. Runs ONCE, on first container start,
 # as the bootstrap superuser. The application never connects as a superuser.
 #
 #   twinpath_owner : owns the schema, runs Alembic migrations (DDL). Not used at request time.
@@ -36,5 +36,5 @@ ALTER DEFAULT PRIVILEGES FOR ROLE twinpath_owner IN SCHEMA public
 ALTER DEFAULT PRIVILEGES FOR ROLE twinpath_owner IN SCHEMA public
   GRANT USAGE, SELECT ON SEQUENCES TO twinpath_app;
 EOSQL
-  echo "TwinPath: database $db initialised"
+  echo "AI Career Guidance App: database $db initialised"
 done

@@ -1,20 +1,20 @@
 ---
-title: How TwinPath AI uses and protects your data
+title: How the AI Career Guidance App uses and protects your data
 ---
 
-# How TwinPath AI uses and protects your data
+# How the AI Career Guidance App uses and protects your data
 
 ## What is stored
 
-TwinPath stores the profile information you enter (academic details, skills, projects, experience, certifications, goals), assessment results recorded by mentors, versioned snapshots of your twin, readiness estimates, roadmaps, simulations you save, documents you upload, and your mentor conversations. Attendance is stored only if you grant the attendance-data consent.
+The AI Career Guidance App stores the profile information you enter (academic details, skills, projects, experience, certifications, goals), assessment results recorded by mentors, versioned snapshots of your twin, readiness estimates, roadmaps, simulations you save, documents you upload, and your mentor conversations. Attendance is stored only if you grant the attendance-data consent.
 
 ## What is not collected
 
-TwinPath does not ask for, and does not use, protected personal attributes such as gender, religion, caste or date of birth. These attributes are never inputs to any model.
+The AI Career Guidance App does not ask for, and does not use, protected personal attributes such as gender, religion, caste or date of birth. These attributes are never inputs to any model.
 
 ## Local AI
 
-The AI mentor and the document embeddings run on a local model through Ollama. Your prompts, profile and documents are not sent to external AI services.
+The Personalized Mentor and the document embeddings run on a local model through Ollama. Your prompts, profile and documents are not sent to external AI services.
 
 ## Who can see your data
 

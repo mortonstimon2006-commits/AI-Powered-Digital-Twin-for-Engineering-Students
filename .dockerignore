@@ -13,6 +13,7 @@
 .env.*
 !.env.example
 backend/var
-backend/artifacts
+backend/artifacts/models
+backend/artifacts/datasets
 backups
 docs

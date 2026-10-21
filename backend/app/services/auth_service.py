@@ -39,7 +39,7 @@ LOCKOUT_THRESHOLD = 5
 VERIFY_TTL = timedelta(hours=24)
 RESET_TTL = timedelta(minutes=30)
 MFA_CHALLENGE_TTL = timedelta(minutes=5)
-MFA_ISSUER = "TwinPath AI"
+MFA_ISSUER = "AI Career Guidance App"
 
 
 def _now() -> datetime:
@@ -84,7 +84,9 @@ def register(
     email = email.lower()
     if not consent:
         raise AppError(
-            "Consent to process your profile data is required to use TwinPath AI.", code="consent_required", status_code=422
+            "Consent to process your profile data is required to use the AI Career Guidance App.",
+            code="consent_required",
+            status_code=422,
         )
     _require_strong(password, email, display_name)
     pw_hash = hash_password(password)  # hash before the lookup: equal work for both branches

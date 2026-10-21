@@ -1,6 +1,6 @@
-"""TwinPath role-skill framework, version 1 (reference data).
+"""AI Career Guidance App role-skill framework, version 1 (reference data).
 
-PROVENANCE — read before citing: this framework was authored by the TwinPath project team
+PROVENANCE — read before citing: this framework was authored by the project team
 as an engineering synthesis of commonly stated entry-level expectations for each role. It is
 NOT derived from a statistical analysis of job postings, and the importance weights are
 expert judgements awaiting validation with faculty/industry reviewers (see
@@ -21,7 +21,7 @@ from __future__ import annotations
 
 FRAMEWORK_VERSION = "twinpath-framework-v1"
 FRAMEWORK_SOURCE_NOTE = (
-    "TwinPath role-skill framework v1 (2026-10): engineering synthesis by the project team of "
+    "AI Career Guidance App role-skill framework v1 (2026-10): engineering synthesis by the project team of "
     "commonly stated entry-level expectations. Not derived from a job-postings dataset; "
     "importance weights are expert judgements pending validation. See docs/methodology/role-framework.md."
 )
@@ -688,7 +688,7 @@ ASSESSMENTS: list[tuple[str, str, str, float, str, list[str]]] = [
         "DSA Coding Assessment",
         "coding",
         100,
-        "Timed problem-solving round (2–3 problems) scored by a mentor using the TwinPath DSA rubric.",
+        "Timed problem-solving round (2–3 problems) scored by a mentor using the app's DSA rubric.",
         ["data-structures", "algorithms", "complexity-analysis"],
     ),
     (

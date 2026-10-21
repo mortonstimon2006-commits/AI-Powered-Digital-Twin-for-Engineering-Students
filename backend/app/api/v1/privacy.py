@@ -14,6 +14,7 @@ from app.errors import AppError
 from app.models import UserFeedback
 from app.schemas.common import Message, StrictModel
 from app.security.passwords import verify_password
+from app.security.ratelimit import FEEDBACK_USER, limiter
 from app.services import audit, privacy
 from app.services.rag.ollama_client import OllamaUnavailable
 from app.services.twin.history import ensure_snapshot
@@ -118,9 +119,10 @@ class FeedbackIn(StrictModel):
 
 @router.post("/feedback", response_model=Message)
 def feedback(body: FeedbackIn, principal: CurrentUser, db: DB) -> Message:
-    db.add(UserFeedback(user_id=principal.id, **body.model_dump()))
+    limiter.hit(FEEDBACK_USER, str(principal.id))
+    db.add(UserFeedback(user_id=principal.id, **{**body.model_dump(), "comment": body.comment.strip()}))
     db.commit()
-    return Message(message="Thank you — your feedback helps evaluate TwinPath.")
+    return Message(message="Thank you — your feedback helps evaluate the AI Career Guidance App.")
 
 
 @router.get("/feedback")

@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "TwinPath AI API",
-    "description": "Career digital-twin platform: readiness modelling, skill gaps, simulation, roadmaps, local AI mentor.",
+    "title": "AI Career Guidance App API",
+    "description": "Career digital-twin platform: readiness modelling, skill gaps, simulation, roadmaps, local Personalized Mentor.",
     "version": "0.1.0"
   },
   "paths": {
@@ -3845,6 +3845,82 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Audit Log Api V1 Admin Audit Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/feedback": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Feedback List",
+        "description": "Recent feedback, newest first. Anonymous by design: no user identity is returned, so\nadministrators can read what people wrote without seeing who wrote it.",
+        "operationId": "feedback_list_api_v1_admin_feedback_get",
+        "parameters": [
+          {
+            "name": "target_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 24
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Type"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Feedback List Api V1 Admin Feedback Get"
                 }
               }
             }

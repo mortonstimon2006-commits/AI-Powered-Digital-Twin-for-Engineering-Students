@@ -114,7 +114,7 @@ export function LoginPage() {
 
   return (
     <AuthFrame title="Welcome back" subtitle="Sign in to your digital twin."
-      footer={<>New to TwinPath? <Link className="text-aurora hover:underline" to="/register">Create an account</Link></>}>
+      footer={<>New to the AI Career Guidance App? <Link className="text-aurora hover:underline" to="/register">Create an account</Link></>}>
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         {error && <Notice tone="danger">{error}</Notice>}
         <Field label="Email" error={form.formState.errors.email?.message}>
@@ -144,7 +144,7 @@ const registerSchema = z.object({
   display_name: z.string().trim().min(2, "Enter your name.").max(80),
   email: z.email("Enter a valid email address."),
   password: passwordSchema,
-  accept_profile_processing: z.literal(true, { error: "Consent is required to use TwinPath." }),
+  accept_profile_processing: z.literal(true, { error: "Consent is required to use the AI Career Guidance App." }),
 });
 
 export function RegisterPage() {
@@ -202,7 +202,7 @@ export function RegisterPage() {
         <label className="flex items-start gap-3 rounded-lg border border-line bg-ink-800/50 p-3 text-sm">
           <input type="checkbox" className="mt-0.5 size-4 accent-[#5eead4]" {...form.register("accept_profile_processing")} />
           <span className="text-fg-muted">
-            I agree that TwinPath may process the profile information I enter to provide its features. Optional uses (mentor sharing,
+            I agree that the AI Career Guidance App may process the profile information I enter to provide its features. Optional uses (mentor sharing,
             research use) are off by default and can be changed in Privacy settings.
           </span>
         </label>
@@ -310,7 +310,7 @@ export function VerifyEmailPage() {
       });
   }, [token, qc]);
   return (
-    <AuthFrame title="Email verification" footer={<Link className="text-aurora hover:underline" to="/app">Continue to TwinPath</Link>}>
+    <AuthFrame title="Email verification" footer={<Link className="text-aurora hover:underline" to="/app">Continue to the app</Link>}>
       {state === "working" && <p className="text-sm text-fg-muted" role="status">Verifying…</p>}
       {state === "ok" && <Notice tone="ok" title="Your email address is verified." />}
       {state === "error" && <Notice tone="danger">{message}</Notice>}

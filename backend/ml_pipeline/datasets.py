@@ -5,7 +5,7 @@ Sources:
   csv:<path>          historical/assessor-labelled CSV. Requires a sidecar <path>.provenance.json
                       describing origin, licence/permission, label definition and collection
                       period — training refuses to run without it.
-  app_labels          assessor labels recorded in TwinPath (readiness_labels) joined with the
+  app_labels          assessor labels recorded in the app (readiness_labels) joined with the
                       frozen twin snapshot they were given against, restricted to students who
                       granted the `research_use` consent.
 """
@@ -111,7 +111,7 @@ def load_dataset(source: str, *, seed: int = 42, n_students: int = 1500) -> Data
             "label_definition": TARGET_DEFINITION,
             "target": TARGET_NAME,
             "collection_period": "n/a (simulated)",
-            "contact": "TwinPath project team",
+            "contact": "project team",
             "warning": "SYNTHETIC DEVELOPMENT DATA. Metrics do not describe real students.",
         }
         is_synth = True
@@ -161,11 +161,11 @@ def _load_app_labels() -> tuple[pd.DataFrame, dict[str, Any]]:
                 }
             )
     provenance = {
-        "origin": "TwinPath in-app assessor labels (readiness_labels) with frozen twin snapshots",
+        "origin": "AI Career Guidance App in-app assessor labels (readiness_labels) with frozen twin snapshots",
         "permission": "Students who granted the research_use consent at labelling/export time",
         "label_definition": TARGET_DEFINITION,
         "target": TARGET_NAME,
         "collection_period": "see rated_at range in the report",
-        "contact": "TwinPath administrators",
+        "contact": "app administrators",
     }
     return pd.DataFrame(rows), provenance

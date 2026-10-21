@@ -28,7 +28,7 @@ Every skill in your skills section should appear in at least one project or expe
 
 ## Tailor to the role
 
-Compare your resume with the job description. Highlight the projects and skills that match, and use the role's terminology where it accurately describes your work. TwinPath's resume and job-description analyser shows which required skills your resume mentions and which are missing.
+Compare your resume with the job description. Highlight the projects and skills that match, and use the role's terminology where it accurately describes your work. The app's resume and job-description analyser shows which required skills your resume mentions and which are missing.
 
 ## Honesty matters
 

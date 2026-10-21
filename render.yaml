@@ -1,0 +1,44 @@
+# Render Blueprint: the AI Career Guidance App API on Render's free plan, with the database on Neon.
+# Step-by-step guide and limitations: docs/operations/free-hosting.md
+#
+# Values marked `sync: false` are secrets or URLs you paste into the Render dashboard when the
+# Blueprint is first applied. They are never stored in this file or in git.
+services:
+  - type: web
+    name: ai-career-guidance-api
+    runtime: docker
+    plan: free
+    region: singapore              # keep the same region as the Neon project (AWS ap-southeast-1)
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    dockerCommand: sh /app/start-hosted.sh
+    healthCheckPath: /api/v1/health/live
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: TWINPATH_ENV
+        value: production
+      # Neon *direct* (non-pooled) connection strings; postgresql:// URLs are accepted as copied.
+      - key: DATABASE_URL            # twinpath_app role (row-level security applies)
+        sync: false
+      - key: MIGRATION_DATABASE_URL  # neondb_owner role (schema migrations only)
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FIELD_ENCRYPTION_KEY    # a Fernet key; see the guide for the one-line generator
+        sync: false
+      - key: ALLOWED_ORIGINS         # your Vercel URL, e.g. https://twinpath.vercel.app
+        sync: false
+      - key: PUBLIC_APP_URL          # the same Vercel URL
+        sync: false
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: TRUST_PROXY_HEADERS
+        value: "true"
+      - key: DB_DISABLE_POOL         # no idle connections, so Neon's free compute can scale to zero
+        value: "true"
+      - key: EMAIL_BACKEND           # no email until SMTP is configured (see the guide)
+        value: none
+      - key: REQUIRE_EMAIL_VERIFICATION
+        value: "false"

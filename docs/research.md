@@ -36,7 +36,7 @@ The research value lies in this integration and its evaluation, not in the chatb
 
 | Kind | Items |
 |---|---|
-| **Measured** (executed in this repository) | 94 backend and 25 frontend automated tests; 6 Playwright end-to-end journeys (dev servers and containers); ML evaluation on synthetic data ([model card](ml/model-card.md)); RAG evaluation on a small in-house set ([report](reports/rag-evaluation.md)); local LLM benchmark ([json](reports/llm-benchmark.json)); backup and restore check; link validation of 50 resources |
+| **Measured** (executed in this repository) | 97 backend and 26 frontend automated tests; 6 Playwright end-to-end journeys (dev servers and containers); ML evaluation on synthetic data ([model card](ml/model-card.md)); RAG evaluation on a small in-house set ([report](reports/rag-evaluation.md)); local LLM benchmark ([json](reports/llm-benchmark.json)); backup and restore check; link validation of 50 resources |
 | **Engineering design choices** | proficiency trust weights, %→level mapping, gap formula constants, roadmap effort ranges, role weights, band thresholds |
 | **Simulated** | the entire training/evaluation cohort of the active readiness model |
 | **Not yet measured** | anything about real students, the usefulness of recommendations, fairness on real populations |

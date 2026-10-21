@@ -24,11 +24,12 @@ export function BrandMark({ className }: { className?: string }) {
 
 export function Brand({ to = "/", compact = false }: { to?: string; compact?: boolean }) {
   return (
-    <Link to={to} className="group inline-flex items-center gap-2.5 rounded-lg" aria-label="TwinPath AI home">
+    <Link to={to} className="group inline-flex items-center gap-2.5 rounded-lg" aria-label="AI Career Guidance App home">
       <BrandMark className="transition-transform duration-300 group-hover:rotate-[8deg]" />
       {!compact && (
-        <span className="font-display text-[1.05rem] font-semibold tracking-tight">
-          TwinPath <span className="text-gradient">AI</span>
+        // 1rem and no wrapping: the full name must fit the 260px app sidebar on one line.
+        <span className="whitespace-nowrap font-display text-base font-semibold tracking-tight">
+          <span className="text-gradient">AI</span> Career Guidance App
         </span>
       )}
     </Link>

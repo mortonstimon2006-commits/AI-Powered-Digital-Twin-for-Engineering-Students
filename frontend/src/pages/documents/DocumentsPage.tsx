@@ -103,7 +103,7 @@ function ResumeAnalysis({ doc }: { doc: DocumentItem }) {
         <CardHeader title="Suggestions" description="Deterministic checks — never invented achievements." actions={<Lightbulb className="size-4 text-warn" />} />
         <CardBody className="space-y-2">
           {(doc.extracted.suggestions ?? []).length ? doc.extracted.suggestions!.map((s) => <Notice key={s.code} tone="info">{s.message}</Notice>) : <p className="text-sm text-fg-muted">No issues found by the automated checks.</p>}
-          {doc.injection_flags > 0 && <Notice tone="warn" icon={<ShieldAlert className="size-4" />}>{doc.injection_flags} passage(s) looked like instructions to an AI and are withheld from the mentor.</Notice>}
+          {doc.injection_flags > 0 && <Notice tone="warn" icon={<ShieldAlert className="size-4" />}>{doc.injection_flags} passage(s) looked like instructions to an AI and are withheld from the Personalized Mentor.</Notice>}
           <p className="pt-2 text-xs text-fg-faint">{doc.extracted.word_count} words · {Object.entries(doc.extracted.sections ?? {}).map(([k, v]) => `${k} (${v})`).join(", ")}</p>
         </CardBody>
       </Card>
@@ -149,7 +149,7 @@ export function DocumentsPage() {
           </div>
 
           <Card>
-            <CardHeader title="Your documents" description="Deleting a document removes the file, its analysis and its mentor index." />
+            <CardHeader title="Your documents" description="Deleting a document removes the file, its analysis and its Personalized Mentor index." />
             <CardBody>
               {items.length ? (
                 <div className="overflow-x-auto">
@@ -166,7 +166,7 @@ export function DocumentsPage() {
                           <td className="text-right">
                             {d.original_filename && <Button variant="ghost" size="icon" aria-label={`Download ${d.title}`} onClick={() => download(`/documents/${d.id}/download`, d.original_filename ?? "document")}><Download className="size-4" /></Button>}
                             <ConfirmButton trigger={<Button variant="ghost" size="icon" aria-label={`Delete ${d.title}`}><Trash2 className="size-4" /></Button>}
-                              title="Delete this document?" description="The file, its extracted analysis and its mentor index are permanently removed." confirmLabel="Delete"
+                              title="Delete this document?" description="The file, its extracted analysis and its Personalized Mentor index are permanently removed." confirmLabel="Delete"
                               onConfirm={async () => { await api(`/documents/${d.id}`, { method: "DELETE" }); await docs.refetch(); }} />
                           </td>
                         </tr>

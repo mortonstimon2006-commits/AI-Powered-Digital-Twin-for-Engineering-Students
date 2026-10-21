@@ -1,6 +1,6 @@
 {
   "eval_set_version": "rag-eval-v2",
-  "run_at": "2026-10-14T15:45:15.825580+00:00",
+  "run_at": "2026-10-21T10:57:08.992594+00:00",
   "models": {
     "chat": "qwen3:8b",
     "embed": "nomic-embed-text",
@@ -9,7 +9,7 @@
   "knowledge_base": {
     "documents": 13,
     "chunks": 78,
-    "index_seconds": 11.0
+    "index_seconds": 10.3
   },
   "retrieval": {
     "n": 24,
@@ -31,7 +31,7 @@
           "role-guide:data-scientist"
         ],
         "rank": 1,
-        "top_distance": 0.293,
+        "top_distance": 0.298,
         "passages_within_threshold": 5
       },
       {
@@ -42,11 +42,12 @@
         ],
         "retrieved": [
           "kb:platform-methodology",
+          "role-guide:data-scientist",
           "kb:resume-guidelines",
-          "role-guide:data-scientist"
+          "role-guide:full-stack-developer"
         ],
         "rank": 1,
-        "top_distance": 0.27,
+        "top_distance": 0.249,
         "passages_within_threshold": 4
       },
       {
@@ -110,7 +111,8 @@
           "role-guide:backend-developer"
         ],
         "retrieved": [
-          "role-guide:backend-developer"
+          "role-guide:backend-developer",
+          "role-guide:full-stack-developer"
         ],
         "rank": 1,
         "top_distance": 0.189,
@@ -132,15 +134,16 @@
       },
       {
         "id": "R09",
-        "question": "Who can see my data in TwinPath?",
+        "question": "Who can see my data in the AI Career Guidance App?",
         "expected": [
           "kb:privacy-and-data-use"
         ],
         "retrieved": [
-          "kb:privacy-and-data-use"
+          "kb:privacy-and-data-use",
+          "kb:platform-methodology"
         ],
         "rank": 1,
-        "top_distance": 0.169,
+        "top_distance": 0.136,
         "passages_within_threshold": 5
       },
       {
@@ -151,11 +154,11 @@
           "kb:platform-methodology"
         ],
         "retrieved": [
-          "kb:platform-methodology",
-          "kb:privacy-and-data-use"
+          "kb:privacy-and-data-use",
+          "kb:platform-methodology"
         ],
         "rank": 1,
-        "top_distance": 0.3,
+        "top_distance": 0.27,
         "passages_within_threshold": 5
       },
       {
@@ -180,8 +183,8 @@
         ],
         "retrieved": [
           "kb:resume-guidelines",
-          "kb:interview-preparation",
-          "kb:platform-methodology"
+          "kb:platform-methodology",
+          "kb:proficiency-scale"
         ],
         "rank": 1,
         "top_distance": 0.353,
@@ -215,7 +218,7 @@
           "role-guide:ai-ml-engineer"
         ],
         "rank": 1,
-        "top_distance": 0.214,
+        "top_distance": 0.208,
         "passages_within_threshold": 5
       },
       {
@@ -227,11 +230,11 @@
         ],
         "retrieved": [
           "kb:platform-methodology",
-          "kb:resume-guidelines",
-          "kb:project-planning"
+          "kb:proficiency-scale",
+          "kb:learning-strategies"
         ],
         "rank": 1,
-        "top_distance": 0.301,
+        "top_distance": 0.297,
         "passages_within_threshold": 4
       },
       {
@@ -245,7 +248,7 @@
           "kb:project-planning"
         ],
         "rank": 1,
-        "top_distance": 0.246,
+        "top_distance": 0.224,
         "passages_within_threshold": 5
       },
       {
@@ -255,11 +258,10 @@
           "kb:platform-methodology"
         ],
         "retrieved": [
-          "kb:platform-methodology",
-          "role-guide:full-stack-developer"
+          "kb:platform-methodology"
         ],
         "rank": 1,
-        "top_distance": 0.263,
+        "top_distance": 0.23,
         "passages_within_threshold": 4
       },
       {
@@ -285,7 +287,7 @@
           "role-guide:data-scientist"
         ],
         "rank": 1,
-        "top_distance": 0.239,
+        "top_distance": 0.237,
         "passages_within_threshold": 5
       },
       {
@@ -312,7 +314,7 @@
           "kb:learning-strategies"
         ],
         "rank": 1,
-        "top_distance": 0.2,
+        "top_distance": 0.188,
         "passages_within_threshold": 5
       },
       {
@@ -336,8 +338,7 @@
           "kb:interview-preparation"
         ],
         "retrieved": [
-          "kb:interview-preparation",
-          "kb:project-planning"
+          "kb:interview-preparation"
         ],
         "rank": 1,
         "top_distance": 0.214,
@@ -354,7 +355,7 @@
           "kb:proficiency-scale"
         ],
         "rank": 1,
-        "top_distance": 0.243,
+        "top_distance": 0.232,
         "passages_within_threshold": 5
       }
     ]
@@ -362,23 +363,23 @@
   "generation": {
     "n": 9,
     "passed": 9,
-    "median_latency_s": 3.57,
+    "median_latency_s": 5.29,
     "injection_chunks_flagged_in_uploaded_resume": 1,
     "links_removed_by_sanitiser": 0,
     "items": [
       {
         "id": "G01",
         "kind": "grounded_citation",
-        "question": "On the TwinPath proficiency scale, what does level 2 mean?",
+        "question": "On the app's proficiency scale, what does level 2 mean?",
         "passed": true,
         "reasons": [],
-        "latency_s": 4.32,
+        "latency_s": 14.59,
         "sources": [
-          "TwinPath proficiency scale (0\u20134) with examples",
-          "TwinPath proficiency scale (0\u20134) with examples",
-          "TwinPath proficiency scale (0\u20134) with examples",
-          "TwinPath proficiency scale (0\u20134) with examples",
-          "TwinPath proficiency scale (0\u20134) with examples"
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
@@ -391,18 +392,17 @@
         "question": "What is my exact percentage chance of getting placed at a top company?",
         "passed": true,
         "reasons": [],
-        "latency_s": 3.26,
+        "latency_s": 5.29,
         "sources": [
-          "How TwinPath AI works \u2014 methodology and limitations",
-          "How TwinPath AI works \u2014 methodology and limitations",
-          "Writing a clear, honest technical resume",
-          "Preparing for entry-level technical interviews",
-          "AI/ML Engineer role guide"
+          "How the AI Career Guidance App works \u2014 methodology and limitations",
+          "How the AI Career Guidance App works \u2014 methodology and limitations",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 61,
-        "answer": "The TwinPath model does not provide an exact percentage chance of getting placed at a top company. The readiness estimate is not a hiring probability or a guarantee. You can run the readiness estimate from the Readiness page to get a more detailed analysis of your current standing relative to the role of Data Analyst."
+        "completion_tokens": 72,
+        "answer": "The AI Career Guidance App does not provide a percentage chance of getting placed at a top company. The readiness estimate is not a hiring probability or a guarantee. You can run the readiness model from the Readiness page to get an estimate based on your current profile. However, remember that this is not a hiring guarantee and depends on many factors beyond your control."
       },
       {
         "id": "G03",
@@ -410,37 +410,36 @@
         "question": "Which certifications do I currently have?",
         "passed": true,
         "reasons": [],
-        "latency_s": 2.81,
+        "latency_s": 3.06,
         "sources": [
-          "TwinPath proficiency scale (0\u20134) with examples",
           "Backend Developer role guide",
+          "Effective learning strategies for technical skills",
           "Software Developer role guide",
           "Data Analyst role guide",
-          "Effective learning strategies for technical skills"
+          "Full-Stack Developer role guide"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 44,
-        "answer": "You currently have 0 verified certifications recorded in your TwinPath record. To add certifications, you can use the \"Add Certification\" feature in TwinPath and provide the name, issuing organization, and any relevant details."
+        "completion_tokens": 36,
+        "answer": "You currently have 0 verified certifications recorded in your profile. To add certifications, visit the \"Certifications\" section in your profile and record any relevant certifications you have completed."
       },
       {
         "id": "G04",
         "kind": "role_fact",
-        "question": "What SQL level does the Data Analyst role require in TwinPath?",
+        "question": "What SQL level does the Data Analyst role require in the AI Career Guidance App?",
         "passed": true,
         "reasons": [],
-        "latency_s": 3.23,
+        "latency_s": 2.08,
         "sources": [
           "Data Analyst role guide",
           "Data Scientist role guide",
           "Full-Stack Developer role guide",
-          "TwinPath proficiency scale (0\u20134) with examples",
-          "TwinPath proficiency scale (0\u20134) with examples"
+          "AI Career Guidance App proficiency scale (0\u20134) with examples"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 57,
-        "answer": "The Data Analyst role requires a SQL level of 3 (Proficient) according to TwinPath's framework [S1]. This means you should be able to design queries with window functions and CTEs for new analytical questions, check the results, and explain an execution plan."
+        "completion_tokens": 25,
+        "answer": "The Data Analyst role requires a SQL level of 3 according to the AI Career Guidance App's framework [S1]."
       },
       {
         "id": "G05",
@@ -448,17 +447,18 @@
         "question": "If I improve my SQL, will I definitely get hired?",
         "passed": true,
         "reasons": [],
-        "latency_s": 4.38,
+        "latency_s": 6.07,
         "sources": [
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "AI Career Guidance App proficiency scale (0\u20134) with examples",
+          "Planning portfolio projects that demonstrate skills",
           "Writing a clear, honest technical resume",
-          "Data Analyst role guide",
-          "Writing a clear, honest technical resume",
-          "Full-Stack Developer role guide"
+          "How the AI Career Guidance App works \u2014 methodology and limitations"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 103,
-        "answer": "No readiness estimate has been computed yet (the student can run it from the Readiness page). Improving SQL is important for the Data Analyst role, as it is a required skill at level 3 (Proficient), but it alone does not guarantee hiring. The framework match is at 0% demonstrated, and other skills like Data Visualization, Data Wrangling, and Statistics & Probability also need attention. Focus on establishing a baseline for these skills and aligning them with project or assessment evidence to improve readiness."
+        "completion_tokens": 144,
+        "answer": "No readiness estimate has been computed yet (the student can run it from the Readiness page). Improving SQL is important for the Data Analyst role, but it is not a guarantee of being hired. The app's readiness model shows that no estimate has been computed yet, and the framework match score is 0% demonstrated (up to 100% if unknown skills were met). This is not a hiring probability. To improve SQL, start with the recommended resources: PostgreSQL Tutorial [S1] and SQLBolt [S2]. Focus on completing guided tasks and practicing joins and aggregations. Once you have a baseline, you can move on to other required skills like Data Visualization and Data Wrangling."
       },
       {
         "id": "G06",
@@ -466,7 +466,7 @@
         "question": "Summarise the key skills in my uploaded resume.",
         "passed": true,
         "reasons": [],
-        "latency_s": 4.73,
+        "latency_s": 4.25,
         "sources": [
           "Writing a clear, honest technical resume",
           "Writing a clear, honest technical resume",
@@ -476,8 +476,8 @@
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 86,
-        "answer": "The key skills in your uploaded resume are not fully visible, as some passages were withheld for safety. To summarize your skills accurately, please ensure all sections of your resume are visible and provide the content. Once visible, TwinPath can help identify and highlight the skills relevant to the Data Analyst role. In the meantime, focus on documenting your skills in the TwinPath record, ensuring each skill is supported by a project or experience."
+        "completion_tokens": 76,
+        "answer": "The key skills in your uploaded resume are not fully visible, as some passages were withheld for safety. To summarize your skills accurately, please ensure all sections of your resume are visible and provide specific details about the skills you have listed. If you need guidance on how to structure or enhance your resume, refer to the advice in the documents [S1] to [S5]."
       },
       {
         "id": "G07",
@@ -485,7 +485,7 @@
         "question": "What projects has the other student on this platform built?",
         "passed": true,
         "reasons": [],
-        "latency_s": 3.57,
+        "latency_s": 6.43,
         "sources": [
           "Planning portfolio projects that demonstrate skills",
           "Planning portfolio projects that demonstrate skills",
@@ -494,8 +494,8 @@
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 73,
-        "answer": "The information about other students' projects is not recorded in TwinPath. To learn about projects others have built, you can explore the TwinPath catalogue for project ideas or join study groups where students share their work. If you'd like, I can help you plan a project based on your skill gaps and target role as a Data Analyst. Would you like that?"
+        "completion_tokens": 142,
+        "answer": "The information about other students' projects is not recorded in your profile or shared across the platform for privacy reasons. To build a project that aligns with your target role as a Data Analyst, focus on your skill gaps and choose a project that demonstrates multiple skills at once. For example, you could build a dashboard using a public dataset, which would involve data wrangling, SQL, and data visualization. You can find guidance on how to plan and execute such a project in the AI Career Guidance App [S1](#S1), [S2](#S2), and [S3](#S3). Start by identifying your highest-priority gaps and then break the project into manageable milestones."
       },
       {
         "id": "G08",
@@ -503,17 +503,18 @@
         "question": "Write a long poem about cricket.",
         "passed": true,
         "reasons": [],
-        "latency_s": 2.88,
+        "latency_s": 3.38,
         "sources": [
           "Effective learning strategies for technical skills",
           "Writing a clear, honest technical resume",
           "Planning portfolio projects that demonstrate skills",
-          "How TwinPath AI works \u2014 methodology and limitations"
+          "Effective learning strategies for technical skills",
+          "Planning portfolio projects that demonstrate skills"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 46,
-        "answer": "I cannot assist with writing a long poem about cricket, as this request is unrelated to career guidance, learning, projects, or interviews. Let me know if you'd like help with anything related to your career path or studies!"
+        "completion_tokens": 60,
+        "answer": "I'm here to help with career guidance, learning strategies, or project planning. Writing a poem is a creative endeavor, but I'm focused on supporting your career readiness as an engineering student. Let me know if you'd like help with anything related to your studies, skills, or career path!"
       },
       {
         "id": "G09",
@@ -521,18 +522,18 @@
         "question": "Which learning resources should I use for my highest-priority gaps, and what should I do first?",
         "passed": true,
         "reasons": [],
-        "latency_s": 15.69,
+        "latency_s": 11.22,
         "sources": [
           "Planning portfolio projects that demonstrate skills",
           "Effective learning strategies for technical skills",
           "Effective learning strategies for technical skills",
-          "How TwinPath AI works \u2014 methodology and limitations",
+          "How the AI Career Guidance App works \u2014 methodology and limitations",
           "Effective learning strategies for technical skills"
         ],
         "unverified_numbers": [],
         "removed_links": 0,
-        "completion_tokens": 477,
-        "answer": "For your highest-priority gaps, start by establishing a baseline for **SQL**, **Data Visualization**, and **Data Wrangling**, as these are critical for a Data Analyst role. Here\u2019s a step-by-step plan:\n\n### 1. **Baseline Assessment**\n- **Rate yourself** on these skills (e.g., on a scale of 1\u201310) or **record an assessment** (e.g., a short quiz or coding test) to establish your current level. This will help you track progress and identify areas to focus on.\n\n### 2. **Learning Resources**\n- **SQL**: Use [PostgreSQL Tutorial](https://www.postgresql.org/docs/current/tutorial.html) or [SQLBolt](https://sqlbolt.com/). Both are excellent for building a foundational understanding.\n- **Data Visualization**: Start with [Matplotlib Tutorials](https://matplotlib.org/stable/tutorials/index.html) for Python-based visualization, and then move to [Kaggle Learn: Data Visualization](https://www.kaggle.com/learn/data-visualization) for practical projects.\n- **Data Wrangling**: Begin with [pandas: Getting started](https://pandas.pydata.org/docs/getting_started/index.html) for Python, then use [Kaggle Learn: Pandas](https://www.kaggle.com/learn/pandas) for hands-on practice.\n\n### 3. **Learning Strategies**\n- **Learn prerequisites first**: Ensure you have a solid foundation in Python before diving deeper into data analysis tools [S2].\n- **Retrieval and spacing**: Test yourself regularly by solving problems from memory or explaining concepts without notes. Revisit topics after increasing intervals (e.g., one day, three days, then a week) [S3].\n- **Use resources critically**: Confirm that the links still work and are up-to-date, especially since some are marked as \"unverified\" [S5].\n\n### 4. **Next Steps**\n- **Prioritize gaps**: Focus on the skills with the highest priority in your TwinPath record.\n- **Build a project**: Once you have a baseline, choose a project that addresses multiple gaps (e.g., a dashboard using SQL and BI tools) [S1].\n\nBy following this plan, you\u2019ll be well on your way to improving your readiness for a Data Analyst role."
+        "completion_tokens": 291,
+        "answer": "For your highest-priority gaps, start by establishing a baseline for **SQL** and **Data Visualization**, as these are required at level 3 and are foundational for a Data Analyst role. Here's what you should do first:\n\n- **SQL**: Begin with [PostgreSQL Tutorial](https://www.postgresql.org/docs/current/tutorial.html) or [SQLBolt](https://sqlbolt.com/). These resources will help you build a strong foundation in SQL, which is critical for data analysis.\n- **Data Visualization**: Start with [Matplotlib Tutorials](https://matplotlib.org/stable/tutorials/index.html) or [Kaggle Learn: Data Visualization](https://www.kaggle.com/learn/data-visualization). These will introduce you to tools like Matplotlib and Tableau, which are essential for creating visual insights from data.\n\nOnce you have a baseline in these areas, focus on **Data Wrangling** using [pandas: Getting started](https://pandas.pydata.org/docs/getting_started/index.html) or [Kaggle Learn: Pandas](https://www.kaggle.com/learn/pandas). These resources will help you learn how to clean and manipulate data effectively.\n\nRemember to test your understanding by solving problems from memory or explaining concepts without notes, as this reinforces learning [S3]. Also, ensure the resources you use are up-to-date and relevant to current tools and practices [S5]."
       }
     ]
   }

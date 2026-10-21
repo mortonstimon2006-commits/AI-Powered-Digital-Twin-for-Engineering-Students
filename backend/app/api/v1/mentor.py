@@ -27,8 +27,8 @@ from app.services.rag.ollama_client import OllamaUnavailable, chat_stream, ollam
 router = APIRouter(prefix="/mentor", tags=["mentor"])
 log = logging.getLogger("twinpath.mentor")
 UNAVAILABLE_TEXT = (
-    "The local AI mentor is currently unavailable (the Ollama service or the configured model is "
-    "not running). No answer was generated. Your other TwinPath features keep working."
+    "The Personalized Mentor is currently unavailable (the Ollama service or the configured model is "
+    "not running). No answer was generated. Your other features keep working."
 )
 
 
@@ -260,7 +260,10 @@ async def ask(body: AskIn, request: Request, principal: CurrentUser, db: DB) -> 
         except svc.MentorBusy:
             yield _sse(
                 "error",
-                {"code": "mentor_busy", "message": "The local mentor is busy with other requests. Please try again shortly."},
+                {
+                    "code": "mentor_busy",
+                    "message": "The Personalized Mentor is busy with other requests. Please try again shortly.",
+                },
             )
         except OllamaUnavailable:
             svc.gate().failed += 1

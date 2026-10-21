@@ -35,7 +35,7 @@ The model's ranking of feature importance reflects these coefficients and has **
 
 ## Source 2 — `app_labels` (implemented, no data yet)
 
-Assessor labels recorded in TwinPath (`readiness_labels`), each frozen against the twin snapshot it was given
+Assessor labels recorded in the AI Career Guidance App (`readiness_labels`), each frozen against the twin snapshot it was given
 against, so features can never contain later information. Only students who currently grant the **research-use**
 consent are exported. The specialization column is used for subgroup reporting only.
 

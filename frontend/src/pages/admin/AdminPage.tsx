@@ -1,18 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Activity, Database, LinkIcon, RefreshCw, ShieldCheck, Upload } from "lucide-react";
+import { Activity, Database, LinkIcon, MessageSquareText, RefreshCw, ShieldCheck, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { FEEDBACK_AREAS } from "@/components/FeedbackButton";
 import { PageHeader } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/form";
 import { ConfirmButton, TabPanel, Tabs } from "@/components/ui/overlay";
 import { Badge, Card, CardBody, CardHeader, Stat } from "@/components/ui/primitives";
-import { ErrorState, LoadingBlock, Notice } from "@/components/ui/states";
+import { EmptyState, ErrorState, LoadingBlock, Notice } from "@/components/ui/states";
 import { api, ApiError } from "@/lib/api";
 import { queryClient, useRoles } from "@/lib/queries";
 import type { CareerRole, Requirement } from "@/lib/types";
-import { dateTime, LEVEL_NAMES } from "@/lib/utils";
+import { cn, dateTime, LEVEL_NAMES } from "@/lib/utils";
 
 const err = (e: unknown) => toast.error(e instanceof ApiError ? e.message : "Request failed.");
 
@@ -51,7 +52,7 @@ function SystemTab() {
       <Card className="lg:col-span-3"><CardHeader title="Maintenance" />
         <CardBody className="flex flex-wrap gap-3">
           <ConfirmButton destructive trigger={<Button variant="secondary"><Database className="size-4" /> Apply retention policy</Button>} title="Apply data retention now?"
-            description="Expired documents, old mentor conversations, sessions and tokens are permanently deleted." confirmLabel="Apply" onConfirm={() => retention.mutateAsync()} />
+            description="Expired documents, old Personalized Mentor conversations, sessions and tokens are permanently deleted." confirmLabel="Apply" onConfirm={() => retention.mutateAsync()} />
           <Button variant="secondary" onClick={() => reindex.mutate()} loading={reindex.isPending}><RefreshCw className="size-4" /> Re-index knowledge base</Button>
         </CardBody></Card>
     </div>
@@ -271,11 +272,88 @@ function KnowledgeTab() {
   );
 }
 
+type FeedbackItem = { id: string; created_at: string; target_type: string; target_id: string | null; rating: number; comment: string };
+
+const AREA_LABELS: Record<string, string> = {
+  ...Object.fromEntries(FEEDBACK_AREAS),
+  roadmap_item: "Roadmap item rating",
+  mentor_message: "Personalized Mentor answer rating",
+};
+const FEEDBACK_PAGE = 50;
+
+function FeedbackTab() {
+  const [area, setArea] = useState("");
+  const [offset, setOffset] = useState(0);
+  // Refreshed every 30 s so new feedback appears while the page is open.
+  const list = useQuery({
+    queryKey: ["admin", "feedback", "list", area, offset],
+    queryFn: () => api<{ total: number; items: FeedbackItem[] }>("/admin/feedback", { query: { target_type: area, limit: FEEDBACK_PAGE, offset } }),
+    refetchInterval: 30_000,
+  });
+  const summary = useQuery({
+    queryKey: ["admin", "feedback", "summary"],
+    queryFn: () => api<{ items: { target_type: string; count: number; mean_rating: number }[]; note: string }>("/admin/feedback/summary"),
+    refetchInterval: 30_000,
+  });
+  return (
+    <div className="space-y-5">
+      <Card>
+        <CardHeader title="Ratings by area" description={summary.data?.note} />
+        <CardBody>
+          {summary.isError ? <ErrorState error={summary.error} onRetry={() => summary.refetch()} /> : (summary.data?.items.length ?? 0) === 0 ? (
+            <p className="text-sm text-fg-muted">No ratings yet.</p>
+          ) : (
+            <ul className="grid gap-3 sm:grid-cols-3">{summary.data?.items.map((f) => (
+              <li key={f.target_type} className="rounded-lg border border-line p-3">
+                <p className="text-sm">{AREA_LABELS[f.target_type] ?? f.target_type}</p>
+                <p className="metric text-xl">{f.mean_rating.toFixed(2)}<span className="text-xs text-fg-faint"> / 5 · n={f.count}</span></p>
+              </li>
+            ))}</ul>
+          )}
+        </CardBody>
+      </Card>
+      <Card>
+        <CardHeader title="Recent feedback" description={`Newest first, updated every 30 seconds. Shown without names or emails. ${list.data ? `${list.data.total} in total.` : ""}`}
+          actions={
+            <Select aria-label="Filter feedback by area" className="w-56" value={area} onChange={(e) => { setArea(e.target.value); setOffset(0); }}>
+              <option value="">All areas</option>
+              {Object.entries(AREA_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </Select>
+          } />
+        <CardBody>
+          {list.isLoading ? <LoadingBlock rows={3} /> : list.isError ? <ErrorState error={list.error} onRetry={() => list.refetch()} /> : (list.data?.items.length ?? 0) === 0 ? (
+            <EmptyState icon={<MessageSquareText className="size-5" aria-hidden />} title="No feedback yet">
+              Signed-in users can send feedback from the "Send feedback" button in the sidebar or menu.
+            </EmptyState>
+          ) : (
+            <ul className="divide-y divide-line">
+              {list.data?.items.map((f) => (
+                <li key={f.id} className="py-3">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-fg-faint">
+                    <Badge tone={f.rating >= 4 ? "ok" : f.rating <= 2 ? "danger" : "muted"}>{f.rating} / 5</Badge>
+                    <span className="text-fg-muted">{AREA_LABELS[f.target_type] ?? f.target_type}</span>
+                    {f.target_id?.startsWith("/") && <span className="font-mono">{f.target_id}</span>}
+                    <span className="ml-auto">{dateTime(f.created_at)}</span>
+                  </div>
+                  <p className={cn("mt-1.5 whitespace-pre-wrap break-words text-sm", !f.comment && "text-fg-faint")}>{f.comment || "No comment"}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="mt-3 flex justify-end gap-2">
+            <Button size="sm" variant="secondary" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - FEEDBACK_PAGE))}>Newer</Button>
+            <Button size="sm" variant="secondary" disabled={offset + FEEDBACK_PAGE >= (list.data?.total ?? 0)} onClick={() => setOffset(offset + FEEDBACK_PAGE)}>Older</Button>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
+  );
+}
+
 function AuditTab() {
   const [action, setAction] = useState("");
   const [offset, setOffset] = useState(0);
   const q = useQuery({ queryKey: ["admin", "audit", action, offset], queryFn: () => api<{ items: { id: number; occurred_at: string; actor_id: string | null; action: string; outcome: string; target_type: string | null; target_id: string | null; ip_prefix: string | null; details: Record<string, unknown> | null }[] }>("/admin/audit", { query: { action, offset, limit: 50 } }) });
-  const fb = useQuery({ queryKey: ["admin", "feedback"], queryFn: () => api<{ items: { target_type: string; count: number; mean_rating: number }[]; note: string }>("/admin/feedback/summary") });
   return (
     <div className="space-y-5">
       <Card>
@@ -297,12 +375,6 @@ function AuditTab() {
           <div className="mt-3 flex justify-end gap-2"><Button size="sm" variant="secondary" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 50))}>Newer</Button><Button size="sm" variant="secondary" disabled={(q.data?.items.length ?? 0) < 50} onClick={() => setOffset(offset + 50)}>Older</Button></div>
         </CardBody>
       </Card>
-      <Card>
-        <CardHeader title="User feedback summary" description={fb.data?.note} />
-        <CardBody>
-          <ul className="grid gap-3 sm:grid-cols-3">{fb.data?.items.map((f) => <li key={f.target_type} className="rounded-lg border border-line p-3"><p className="text-sm">{f.target_type.replace("_", " ")}</p><p className="metric text-xl">{f.mean_rating.toFixed(2)}<span className="text-xs text-fg-faint"> / 5 · n={f.count}</span></p></li>)}</ul>
-        </CardBody>
-      </Card>
     </div>
   );
 }
@@ -313,11 +385,12 @@ export function AdminPage() {
     <div>
       <PageHeader icon={ShieldCheck} eyebrow="Administration" title="System administration" description="All administrative actions are role-gated on the server and recorded in the audit log." />
       <Tabs value={tab} onValueChange={setTab} items={[
-        { value: "system", label: <span className="flex items-center gap-1.5"><Activity className="size-3.5" />System</span> }, { value: "users", label: "Users" }, { value: "links", label: "Mentor links" },
-        { value: "roles", label: "Roles" }, { value: "resources", label: "Resources" }, { value: "models", label: "Models" }, { value: "kb", label: "Knowledge base" }, { value: "audit", label: "Audit & feedback" },
+        { value: "system", label: <span className="flex items-center gap-1.5"><Activity className="size-3.5" />System</span> }, { value: "feedback", label: "Feedback" }, { value: "users", label: "Users" }, { value: "links", label: "Mentor links" },
+        { value: "roles", label: "Roles" }, { value: "resources", label: "Resources" }, { value: "models", label: "Models" }, { value: "kb", label: "Knowledge base" }, { value: "audit", label: "Audit log" },
       ]}>
         <div className="pt-6">
           <TabPanel value="system"><SystemTab /></TabPanel>
+          <TabPanel value="feedback"><FeedbackTab /></TabPanel>
           <TabPanel value="users"><UsersTab /></TabPanel>
           <TabPanel value="links"><LinksTab /></TabPanel>
           <TabPanel value="roles"><RolesTab /></TabPanel>

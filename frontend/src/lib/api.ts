@@ -78,7 +78,7 @@ async function toError(resp: Response): Promise<ApiError> {
   const e = body.error ?? {};
   const fallback =
     resp.status === 0 || resp.status >= 502
-      ? "The TwinPath service is temporarily unreachable."
+      ? "The AI Career Guidance App service is temporarily unreachable."
       : "The request could not be completed.";
   return new ApiError(resp.status, e.code ?? `http_${resp.status}`, e.message ?? fallback, e.details, e.request_id);
 }

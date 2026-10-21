@@ -1,7 +1,7 @@
 [project]
 name = "twinpath-backend"
 version = "0.1.0"
-description = "TwinPath AI â€” career digital twin backend (FastAPI)"
+description = "AI Career Guidance App — career digital twin backend (FastAPI)"
 requires-python = ">=3.12,<3.13"
 dependencies = [
   # web / api
@@ -62,7 +62,7 @@ ignore = [
   "B008",   # FastAPI Depends() in defaults is idiomatic
   "RUF012",
   "E501",   # layout is owned by `ruff format`; long prose strings are intentional
-  "RUF001", "RUF002", "RUF003",  # intentional typographic characters (â€“, Ã—, â‰¤) in docs/messages
+  "RUF001", "RUF002", "RUF003",  # intentional typographic characters (–, ×, ≤) in docs/messages
 ]
 
 [tool.ruff.lint.per-file-ignores]

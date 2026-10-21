@@ -20,6 +20,7 @@ from typing import Any
 
 from sqlalchemy import Engine, create_engine, event, text
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import NullPool
 
 from app.config import get_settings
 
@@ -29,6 +30,9 @@ _SET_SCOPE = text("SELECT set_config('app.user_id', :uid, true), set_config('app
 @lru_cache
 def get_engine() -> Engine:
     s = get_settings()
+    connect_args = {"application_name": "twinpath-api", "connect_timeout": 5}
+    if s.db_disable_pool:
+        return create_engine(s.database_url.get_secret_value(), poolclass=NullPool, connect_args=connect_args)
     return create_engine(
         s.database_url.get_secret_value(),
         pool_size=s.db_pool_size,
@@ -36,7 +40,7 @@ def get_engine() -> Engine:
         pool_timeout=s.db_pool_timeout_seconds,
         pool_pre_ping=True,
         pool_recycle=1800,
-        connect_args={"application_name": "twinpath-api", "connect_timeout": 5},
+        connect_args=connect_args,
     )
 
 
